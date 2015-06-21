@@ -1,0 +1,9 @@
+{
+    "name": "github-forks-addon",
+    "id": "github-forks-addon@musicallyut.in",
+    "title": "github forks addon",
+    "description": "Show a button on Github pages to link to the most starred Fork.",
+    "author": "Utkarsh Upadhyay",
+    "license": "MPL 2.0",
+    "version": "0.1.0"
+}
