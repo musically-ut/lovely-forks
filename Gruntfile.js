@@ -27,6 +27,12 @@ module.exports = function(grunt) {
                     'mv <%= config.name %>.xpi <%= config.dist %>',
                     'wget --post-file=<%= config.dist %>/<%= config.name %>.xpi http://localhost:8888/ || echo>/dev/null'
                 ].join('&&')
+            },
+            build: {
+                command: [
+                    'cfx xpi --pkgdir=<%= config.app %>',
+                    'mv <%= config.name %>.xpi <%= config.dist %>'
+                ].join('&&')
             }
         },
         watch: {
@@ -54,4 +60,5 @@ module.exports = function(grunt) {
 
     grunt.registerTask('run', ['shell:run']);
     grunt.registerTask('default', ['run']);
+    grunt.registerTask('build', ['shell:build']);
 };
