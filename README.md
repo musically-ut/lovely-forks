@@ -1,18 +1,22 @@
-## github-forks-addon
+## Lovely forks
+
+ - [Firefox addon](https://addons.mozilla.org/en-US/firefox/addon/lovely-forks/)
+ - [Chrome Web Store](https://chrome.google.com/webstore/detail/lovely-forks/ialbpcipalajnakfondkflpkagbkdoib)
 
 An addon to help you notice **notable** forks of a Github project.
 
 Sometimes on Github, projects are abandoned by the original authors and the
-development continues on a fork of the project. However, the original
-repository is often not updated to say that. I have many times wasted effort
-on making a pull-request or installing the old bugger versions of projects
-when the community had already moved to a fork.
+development continues on a fork. However, the original repository is seldom
+updated to inform newcomers of that fact. I have often wasted effort on making
+a pull-request or installing old buggy versions of projects when the community
+had already moved to a fork.
 
-Moreover, the old project may have gathered a lot of stars, completely
-overshadowing the new forks.
-
-This addon adds a small sub-script under the name of the repository on Github
-with a link to the most **notable fork**, if such a fork exists.
+To make matters worse, the old projects usually have higher search-engine
+traffic and a lot more stars than the forks. This makes the forks even harder
+to find. This addon tries to remedy that by adding a subscript under the name
+of the repository on the Github page of the project with a link to the most
+notable fork (i.e. the fork with the most stars and at least one star), if such
+a fork exists.
 
 ## Acknowledgements
 
