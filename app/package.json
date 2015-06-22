@@ -1,9 +1,10 @@
 {
-    "name": "github-forks-addon",
+    "name": "lovely-forks",
     "id": "github-forks-addon@musicallyut.in",
-    "title": "github forks addon",
-    "description": "Show a button on Github pages to link to the most starred Fork.",
+    "title": "Lovely forks",
+    "description": "Show notable forks of Github projects.",
     "author": "Utkarsh Upadhyay",
     "license": "MPL 2.0",
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "icon": "data/images/Heart_and_fork_inside_128.png"
 }
