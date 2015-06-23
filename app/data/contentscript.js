@@ -3,25 +3,31 @@
 
 var pathComponents = window.location.pathname.split('/');
 var _logName = 'github-forks-extension:';
+var DEBUG = false;
 
-function addInfo(forker, repo, url, numStars) {
+function addInfo(fullName, url, numStars) {
     // If the layout of the page changes, we'll have to change this location.
     // We should make sure that we do not accidentally cause errors here.
     var h1s = window.document.querySelectorAll('.entry-title');
     if (h1s.length > 0) {
         try {
-            var h1 = h1s[0];
-            var span = document.createElement('span');
-            // Stealing the styling from Github fork-info
-            span.classList.add('fork-flag');
-            span.innerHTML = 'Notable fork: ' +
-                             '<a href="' + url + '">' +
-                             forker + '/' + repo +
-                             ' (' +
-                             '<span class="octicon octicon-star"></span>' +
-                             numStars + ')';
+            var starIcon = document.createElement('span');
+            starIcon.classList.add('octicon');
+            starIcon.classList.add('octicon-star');
 
-            h1.appendChild(span);
+            var forkA = document.createElement('a');
+            forkA.href = url;
+            forkA.appendChild(document.createTextNode(fullName + ' ('));
+            forkA.appendChild(starIcon);
+            forkA.appendChild(document.createTextNode(numStars + ')'));
+
+            var forkSpan = document.createElement('span');
+            // Stealing the styling from Github fork-info
+            forkSpan.classList.add('fork-flag');
+            forkSpan.appendChild(document.createTextNode('Notable fork: '));
+            forkSpan.appendChild(forkA);
+
+            h1s[0].appendChild(forkSpan);
         } catch (e) {
             console.error(_logName,
                           'Error appending data to DOM',
@@ -49,8 +55,10 @@ if (pathComponents.length >= 3) {
                 try {
                     var allForks = JSON.parse(xhr.responseText);
                     if (!allForks || allForks.length < 1) {
-                        console.log(_logName,
-                                    'Repository does not have any forks.');
+                        if (DEBUG) {
+                            console.log(_logName,
+                                        'Repository does not have any forks.');
+                        }
                         return;
                     }
 
@@ -58,23 +66,17 @@ if (pathComponents.length >= 3) {
                         starGazers = mostStarredFork['stargazers_count'];
 
                     if (!starGazers) {
-                        console.log(_logName,
-                                    'Repo has only zero starred forks.');
-                        return;
-                    }
-
-                    var forker = mostStarredFork['owner'];
-
-                    if (!forker || !forker['login']) {
-                        console.warn(_logName,
-                                     'Owner of the fork no longer exists.');
+                        if (DEBUG) {
+                            console.log(_logName,
+                                        'Repo has only zero starred forks.');
+                        }
                         return;
                     }
 
                     var forkUrl = mostStarredFork['html_url'],
-                        forkerName = forker['login'];
+                        fullName = mostStarredFork['full_name'];
 
-                    addInfo(forkerName, repo, forkUrl, starGazers);
+                    addInfo(fullName, forkUrl, starGazers);
                 } catch (e) {
                     console.warn(_logName,
                                  'Error while handling response: ',
@@ -99,6 +101,8 @@ if (pathComponents.length >= 3) {
     xhr.send();
 
 } else {
-    console.log(_logName,
-                'The URL did not identify a username/repository pair.');
+    if (DEBUG) {
+        console.log(_logName,
+                    'The URL did not identify a username/repository pair.');
+    }
 }
