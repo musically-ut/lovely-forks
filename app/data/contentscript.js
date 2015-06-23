@@ -4,24 +4,29 @@
 var pathComponents = window.location.pathname.split('/');
 var _logName = 'github-forks-extension:';
 
-function addInfo(forker, repo, url, numStars) {
+function addInfo(fullName, url, numStars) {
     // If the layout of the page changes, we'll have to change this location.
     // We should make sure that we do not accidentally cause errors here.
     var h1s = window.document.querySelectorAll('.entry-title');
     if (h1s.length > 0) {
         try {
-            var h1 = h1s[0];
-            var span = document.createElement('span');
-            // Stealing the styling from Github fork-info
-            span.classList.add('fork-flag');
-            span.innerHTML = 'Notable fork: ' +
-                             '<a href="' + url + '">' +
-                             forker + '/' + repo +
-                             ' (' +
-                             '<span class="octicon octicon-star"></span>' +
-                             numStars + ')';
+            var starIcon = document.createElement('span');
+            starIcon.classList.add('octicon');
+            starIcon.classList.add('octicon-star');
 
-            h1.appendChild(span);
+            var forkA = document.createElement('a');
+            forkA.href = url;
+            forkA.appendChild(document.createTextNode(fullName + ' ('));
+            forkA.appendChild(starIcon);
+            forkA.appendChild(document.createTextNode(numStars + ')'));
+
+            var forkSpan = document.createElement('span');
+            // Stealing the styling from Github fork-info
+            forkSpan.classList.add('fork-flag');
+            forkSpan.appendChild(document.createTextNode('Notable fork: '));
+            forkSpan.appendChild(forkA);
+
+            h1s[0].appendChild(forkSpan);
         } catch (e) {
             console.error(_logName,
                           'Error appending data to DOM',
@@ -71,10 +76,9 @@ if (pathComponents.length >= 3) {
                         return;
                     }
 
-                    var forkUrl = mostStarredFork['html_url'],
-                        forkerName = forker['login'];
+                    var forkUrl = mostStarredFork['html_url'];
 
-                    addInfo(forkerName, repo, forkUrl, starGazers);
+                    addInfo(mostStarredFork['full_name'], forkUrl, starGazers);
                 } catch (e) {
                     console.warn(_logName,
                                  'Error while handling response: ',
