@@ -1,4 +1,4 @@
-![lovely-forks](//musicallyut.in/docs/lovely-forks/logo.png)
+![Lovely Forks Logo](http://musicallyut.in/docs/lovely-forks/logo.png)
 
 ## Lovely forks
 
@@ -47,7 +47,7 @@ is [Semantic-UI](https://github.com/Semantic-Org/Semantic-UI) in a different
 language):
 
 <p align="center">
-<img alt="slate" src="https://musicallyut.in/docs/lovely-forks/semantic-fork.png" width="80%" />
+<img alt="semantic-ui" src="https://musicallyut.in/docs/lovely-forks/semantic-fork.png" width="80%" />
 </p>
 
 Or provides new features ([vim-fugitive](https://github.com/tpope/vim-fugitive) 
@@ -56,7 +56,7 @@ provides git integration for vim,
 integration):
 
 <p align="center">
-<img alt="slate" src="https://musicallyut.in/docs/lovely-forks/-fork.png" width="80%" />
+<img alt="vim-fugitive" src="https://musicallyut.in/docs/lovely-forks/fugitive-fork.png" width="80%" />
 </p>
 
 
