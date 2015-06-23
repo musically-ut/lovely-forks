@@ -3,6 +3,7 @@
 
 var pathComponents = window.location.pathname.split('/');
 var _logName = 'github-forks-extension:';
+var DEBUG = false;
 
 function addInfo(fullName, url, numStars) {
     // If the layout of the page changes, we'll have to change this location.
@@ -54,8 +55,10 @@ if (pathComponents.length >= 3) {
                 try {
                     var allForks = JSON.parse(xhr.responseText);
                     if (!allForks || allForks.length < 1) {
-                        console.log(_logName,
-                                    'Repository does not have any forks.');
+                        if (DEBUG) {
+                            console.log(_logName,
+                                        'Repository does not have any forks.');
+                        }
                         return;
                     }
 
@@ -63,22 +66,17 @@ if (pathComponents.length >= 3) {
                         starGazers = mostStarredFork['stargazers_count'];
 
                     if (!starGazers) {
-                        console.log(_logName,
-                                    'Repo has only zero starred forks.');
+                        if (DEBUG) {
+                            console.log(_logName,
+                                        'Repo has only zero starred forks.');
+                        }
                         return;
                     }
 
-                    var forker = mostStarredFork['owner'];
+                    var forkUrl = mostStarredFork['html_url'],
+                        fullName = mostStarredFork['full_name'];
 
-                    if (!forker || !forker['login']) {
-                        console.warn(_logName,
-                                     'Owner of the fork no longer exists.');
-                        return;
-                    }
-
-                    var forkUrl = mostStarredFork['html_url'];
-
-                    addInfo(mostStarredFork['full_name'], forkUrl, starGazers);
+                    addInfo(fullName, forkUrl, starGazers);
                 } catch (e) {
                     console.warn(_logName,
                                  'Error while handling response: ',
@@ -103,6 +101,8 @@ if (pathComponents.length >= 3) {
     xhr.send();
 
 } else {
-    console.log(_logName,
-                'The URL did not identify a username/repository pair.');
+    if (DEBUG) {
+        console.log(_logName,
+                    'The URL did not identify a username/repository pair.');
+    }
 }
