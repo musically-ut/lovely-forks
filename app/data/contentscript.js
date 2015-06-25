@@ -12,20 +12,22 @@ function addInfo(fullName, url, numStars) {
     if (h1s.length > 0) {
         try {
             var starIcon = document.createElement('span');
-            starIcon.classList.add('octicon');
-            starIcon.classList.add('octicon-star');
+            starIcon.classList.add('octicon', 'octicon-star');
+            starIcon.style.lineHeight = 0; // for alignment
+            starIcon.style.fontSize = '1.2em';
 
             var forkA = document.createElement('a');
             forkA.href = url;
-            forkA.appendChild(document.createTextNode(fullName + ' ('));
-            forkA.appendChild(starIcon);
-            forkA.appendChild(document.createTextNode(numStars + ')'));
+            forkA.appendChild(document.createTextNode(fullName));
 
             var forkSpan = document.createElement('span');
             // Stealing the styling from Github fork-info
             forkSpan.classList.add('fork-flag');
-            forkSpan.appendChild(document.createTextNode('Notable fork: '));
+            forkSpan.appendChild(document.createTextNode('also forked to '));
             forkSpan.appendChild(forkA);
+            forkSpan.appendChild(document.createTextNode(' '));
+            forkSpan.appendChild(starIcon);
+            forkSpan.appendChild(document.createTextNode(numStars));
 
             h1s[0].appendChild(forkSpan);
         } catch (e) {
