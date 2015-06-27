@@ -13,6 +13,6 @@ firefox: chrome
 	@rm -rf .tmp
 	@mkdir -p .tmp
 	@unzip -q ${ARCHIVE_NAME} -d .tmp
-	@cfx xpi --pkgdir=.tmp/app
+	@cfx xpi --pkgdir=.tmp/app --force-mobile
 
 
