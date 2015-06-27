@@ -13,5 +13,6 @@ var { PageMod } = require('sdk/page-mod');
 // Create a content script
 var pageMod = PageMod({
     include: ['*.github.com'], // Work only on Github URLs
-    contentScriptFile: [data.url('contentscript.js')]
+    contentScriptFile: [data.url('contentscript.js')],
+    contentScriptWhen: 'end'
 });
