@@ -63,8 +63,7 @@ integration):
 ## Acknowledgements
 
 This project uses icons made by
-[Freepik](http://www.flaticon.com/authors/freepik) from
+[Freepik](http://www.flaticon.com/authors/freepik) and 
+[Dave Gandy](http://www.flaticon.com/authors/dave-gandy) from
 [www.flaticon.com](http://www.flaticon.com) is licensed by 
 [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/).
-
-  - [Heart with fork inside](http://www.flaticon.com/free-icon/heart-and-fork-inside_33103)
