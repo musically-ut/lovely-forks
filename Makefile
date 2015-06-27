@@ -7,7 +7,7 @@ all: firefox chrome
 
 chrome:
 	@echo "Exporting ${ARCHIVE_NAME}"
-	@git archive master -o ${ARCHIVE_NAME}
+	@git archive HEAD -o ${ARCHIVE_NAME}
 
 firefox: chrome
 	@rm -rf .tmp
