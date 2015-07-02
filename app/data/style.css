@@ -12,3 +12,13 @@
 .has-lovely-forks.entry-title:after {
     display: none;
 }
+
+/* smoother integration */
+.lovely-forks-addon {
+    animation: fade-in 0.2s;
+}
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+}
