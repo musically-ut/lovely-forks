@@ -4,28 +4,30 @@
 var pathComponents = window.location.pathname.split('/');
 var _logName = 'github-forks-extension:';
 var DEBUG = false;
-var el = new WeakMap();
-var forksKey = {};
+var text;
 
 function emptyElem(elem) {
     elem.textContent = ''; // How jQuery does it
 }
 
-function createElement() {
+function getForksElement() {
+    // Verify that the element exists and it's still valid
+    // otherwise, create it
+    if (document.body.contains(text)) {
+        return text;
+    }
+
     // If the layout of the page changes, we'll have to change this location.
     // We should make sure that we do not accidentally cause errors here.
     var repoName = document.querySelector('.entry-title');
     if (repoName) {
         try {
-            var text = document.createElement('span');
+            text = document.createElement('span');
 
             // Stealing the styling from Github fork-info
             text.classList.add('fork-flag', 'lovely-forks-addon');
 
             repoName.appendChild(text);
-
-            // Store it for later use
-            el.set(forksKey, text);
 
             return text;
         } catch (e) {
@@ -41,7 +43,7 @@ function createElement() {
 
 function safeUpdateDOM(action, actionName) {
     // Get the stored version or create it if it doesn't exist
-    var text = el.get(forksKey) || createElement();
+    var text = getForksElement();
 
     // We should make sure that we do not accidentally cause errors here.
     if (text) {
