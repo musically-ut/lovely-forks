@@ -76,6 +76,8 @@ function showDetails(fullName, url, numStars) {
         text.appendChild(document.createTextNode(' '));
         text.appendChild(starIcon);
         text.appendChild(document.createTextNode(numStars));
+
+        text.parentNode.classList.add('has-lovely-forks');
     };
 }
 

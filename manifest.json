@@ -15,6 +15,15 @@
       "matches": [
         "https://github.com/*"
       ],
+      "css": [
+        "app/data/style.css"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://github.com/*"
+      ],
       "js": [
         "app/data/contentscript.js"
       ],

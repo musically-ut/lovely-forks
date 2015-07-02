@@ -1,0 +1,14 @@
+/* placeholder */
+.entry-title:after {
+    display: block;
+    visibility: hidden;
+
+    content: ".";
+    font-size: 11px;
+    line-height: 10px;
+}
+
+/* remove placeholder */
+.has-lovely-forks.entry-title:after {
+    display: none;
+}
