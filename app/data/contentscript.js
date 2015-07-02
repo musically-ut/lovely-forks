@@ -11,7 +11,7 @@ function emptyElem(elem) {
     elem.textContent = ''; // How jQuery does it
 }
 
-function createLoadingIndicator() {
+function createElement() {
     // If the layout of the page changes, we'll have to change this location.
     // We should make sure that we do not accidentally cause errors here.
     var repoName = document.querySelector('.entry-title');
@@ -22,11 +22,12 @@ function createLoadingIndicator() {
             // Stealing the styling from Github fork-info
             text.classList.add('fork-flag', 'lovely-forks-addon');
 
-            text.appendChild(document.createTextNode('loading ...'));
             repoName.appendChild(text);
 
             // Store it for later use
             el.set(forksKey, text);
+
+            return text;
         } catch (e) {
             console.error(_logName,
                           'Error appending data to DOM',
@@ -39,10 +40,11 @@ function createLoadingIndicator() {
 }
 
 function safeUpdateDOM(action, actionName) {
-    var text = el.get(forksKey);
+    // Get the stored version or create it if it doesn't exist
+    var text = el.get(forksKey) || createElement();
 
     // We should make sure that we do not accidentally cause errors here.
-    if (text !== null) {
+    if (text) {
         try {
             emptyElem(text);
             action(text);
@@ -77,10 +79,6 @@ function showDetails(fullName, url, numStars) {
     };
 }
 
-function showNoForks(text) {
-    text.appendChild(document.createTextNode('no notable forks'));
-}
-
 function showError(text) {
     text.appendChild(document.createTextNode('no information'));
 }
@@ -95,9 +93,6 @@ if (pathComponents.length >= 3) {
     var dataURL = makeDataURL(user, repo);
     var xhr = new XMLHttpRequest();
 
-    // Show the loading indicator
-    createLoadingIndicator();
-
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
@@ -108,7 +103,6 @@ if (pathComponents.length >= 3) {
                             console.log(_logName,
                                         'Repository does not have any forks.');
                         }
-                        safeUpdateDOM(showNoForks, 'no forks');
                         return;
                     }
 
@@ -120,7 +114,6 @@ if (pathComponents.length >= 3) {
                             console.log(_logName,
                                         'Repo has only zero starred forks.');
                         }
-                        safeUpdateDOM(showNoForks, 'no notable forks');
                         return;
                     }
 
