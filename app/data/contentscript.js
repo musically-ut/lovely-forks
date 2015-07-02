@@ -3,31 +3,30 @@
 
 var pathComponents = window.location.pathname.split('/');
 var _logName = 'github-forks-extension:';
-var lovelyForksClass = 'lovely-forks-addon-class';
 var DEBUG = false;
+var el = new WeakMap();
+var forksKey = {};
 
 function emptyElem(elem) {
-    while(elem.firstChild) {
-        elem.removeChild(elem.firstChild);
-    }
-    return elem;
-}
-
-function findLovelyForksSpan() {
-    return document.querySelector('.' + lovelyForksClass);
+    elem.textContent = ''; // How jQuery does it
 }
 
 function createLoadingIndicator() {
     // If the layout of the page changes, we'll have to change this location.
     // We should make sure that we do not accidentally cause errors here.
-    var h1s = document.querySelectorAll('.entry-title');
-    if (h1s.length > 0) {
+    var repoName = document.querySelector('.entry-title');
+    if (repoName) {
         try {
-            var loadingSpan = document.createElement('span');
+            var text = document.createElement('span');
+
             // Stealing the styling from Github fork-info
-            loadingSpan.classList.add('fork-flag', lovelyForksClass);
-            loadingSpan.appendChild(document.createTextNode('loading ...'));
-            h1s[0].appendChild(loadingSpan);
+            text.classList.add('fork-flag', 'lovely-forks-addon');
+
+            text.appendChild(document.createTextNode('loading ...'));
+            repoName.appendChild(text);
+
+            // Store it for later use
+            el.set(forksKey, text);
         } catch (e) {
             console.error(_logName,
                           'Error appending data to DOM',
@@ -39,12 +38,14 @@ function createLoadingIndicator() {
     }
 }
 
-function safeUpdateDOM(cb, actionName) {
+function safeUpdateDOM(action, actionName) {
+    var text = el.get(forksKey);
+
     // We should make sure that we do not accidentally cause errors here.
-    var loadingSpan = findLovelyForksSpan();
-    if (loadingSpan !== null) {
+    if (text !== null) {
         try {
-            cb(loadingSpan);
+            emptyElem(text);
+            action(text);
         } catch (e) {
             console.error(_logName,
                           'Error appending data to DOM', e,
@@ -58,7 +59,7 @@ function safeUpdateDOM(cb, actionName) {
 }
 
 function showDetails(fullName, url, numStars) {
-    return function (loadingSpan) {
+    return function (text) {
         var starIcon = document.createElement('span');
         starIcon.classList.add('octicon', 'octicon-star');
         starIcon.style.lineHeight = 0; // for alignment
@@ -68,23 +69,20 @@ function showDetails(fullName, url, numStars) {
         forkA.href = url;
         forkA.appendChild(document.createTextNode(fullName));
 
-        var forkSpan = emptyElem(loadingSpan);
-        forkSpan.appendChild(document.createTextNode('also forked to '));
-        forkSpan.appendChild(forkA);
-        forkSpan.appendChild(document.createTextNode(' '));
-        forkSpan.appendChild(starIcon);
-        forkSpan.appendChild(document.createTextNode(numStars));
+        text.appendChild(document.createTextNode('also forked to '));
+        text.appendChild(forkA);
+        text.appendChild(document.createTextNode(' '));
+        text.appendChild(starIcon);
+        text.appendChild(document.createTextNode(numStars));
     };
 }
 
-function showNoForks(loadingSpan) {
-    var forkSpan = emptyElem(loadingSpan);
-    forkSpan.appendChild(document.createTextNode('no notable forks'));
+function showNoForks(text) {
+    text.appendChild(document.createTextNode('no notable forks'));
 }
 
-function showError(loadingSpan) {
-    var forkSpan = emptyElem(loadingSpan);
-    forkSpan.appendChild(document.createTextNode('no information'));
+function showError(text) {
+    text.appendChild(document.createTextNode('no information'));
 }
 
 function makeDataURL(user, repo) {
