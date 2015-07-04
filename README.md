@@ -67,3 +67,6 @@ This project uses icons made by
 [Dave Gandy](http://www.flaticon.com/authors/dave-gandy) from
 [www.flaticon.com](http://www.flaticon.com) is licensed by 
 [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/).
+
+[bfred-it](https://github.com/bfred-it) has contributed to improving the look
+and feel of the extension considerably.
