@@ -3,31 +3,33 @@
 
 var pathComponents = window.location.pathname.split('/');
 var _logName = 'github-forks-extension:';
-var lovelyForksClass = 'lovely-forks-addon-class';
 var DEBUG = false;
+var text;
 
 function emptyElem(elem) {
-    while(elem.firstChild) {
-        elem.removeChild(elem.firstChild);
+    elem.textContent = ''; // How jQuery does it
+}
+
+function getForksElement() {
+    // Verify that the element exists and it's still valid
+    // otherwise, create it
+    if (document.body.contains(text)) {
+        return text;
     }
-    return elem;
-}
 
-function findLovelyForksSpan() {
-    return document.querySelector('.' + lovelyForksClass);
-}
-
-function createLoadingIndicator() {
     // If the layout of the page changes, we'll have to change this location.
     // We should make sure that we do not accidentally cause errors here.
-    var h1s = document.querySelectorAll('.entry-title');
-    if (h1s.length > 0) {
+    var repoName = document.querySelector('.entry-title');
+    if (repoName) {
         try {
-            var loadingSpan = document.createElement('span');
+            text = document.createElement('span');
+
             // Stealing the styling from Github fork-info
-            loadingSpan.classList.add('fork-flag', lovelyForksClass);
-            loadingSpan.appendChild(document.createTextNode('loading ...'));
-            h1s[0].appendChild(loadingSpan);
+            text.classList.add('fork-flag', 'lovely-forks-addon');
+
+            repoName.appendChild(text);
+
+            return text;
         } catch (e) {
             console.error(_logName,
                           'Error appending data to DOM',
@@ -39,12 +41,15 @@ function createLoadingIndicator() {
     }
 }
 
-function safeUpdateDOM(cb, actionName) {
+function safeUpdateDOM(action, actionName) {
+    // Get the stored version or create it if it doesn't exist
+    var text = getForksElement();
+
     // We should make sure that we do not accidentally cause errors here.
-    var loadingSpan = findLovelyForksSpan();
-    if (loadingSpan !== null) {
+    if (text) {
         try {
-            cb(loadingSpan);
+            emptyElem(text);
+            action(text);
         } catch (e) {
             console.error(_logName,
                           'Error appending data to DOM', e,
@@ -58,7 +63,7 @@ function safeUpdateDOM(cb, actionName) {
 }
 
 function showDetails(fullName, url, numStars) {
-    return function (loadingSpan) {
+    return function (text) {
         var starIcon = document.createElement('span');
         starIcon.classList.add('octicon', 'octicon-star');
         starIcon.style.lineHeight = 0; // for alignment
@@ -68,23 +73,18 @@ function showDetails(fullName, url, numStars) {
         forkA.href = url;
         forkA.appendChild(document.createTextNode(fullName));
 
-        var forkSpan = emptyElem(loadingSpan);
-        forkSpan.appendChild(document.createTextNode('also forked to '));
-        forkSpan.appendChild(forkA);
-        forkSpan.appendChild(document.createTextNode(' '));
-        forkSpan.appendChild(starIcon);
-        forkSpan.appendChild(document.createTextNode(numStars));
+        text.appendChild(document.createTextNode('also forked to '));
+        text.appendChild(forkA);
+        text.appendChild(document.createTextNode(' '));
+        text.appendChild(starIcon);
+        text.appendChild(document.createTextNode(numStars));
+
+        text.parentNode.classList.add('has-lovely-forks');
     };
 }
 
-function showNoForks(loadingSpan) {
-    var forkSpan = emptyElem(loadingSpan);
-    forkSpan.appendChild(document.createTextNode('no notable forks'));
-}
-
-function showError(loadingSpan) {
-    var forkSpan = emptyElem(loadingSpan);
-    forkSpan.appendChild(document.createTextNode('no information'));
+function showError(text) {
+    text.appendChild(document.createTextNode('no information'));
 }
 
 function makeDataURL(user, repo) {
@@ -97,9 +97,6 @@ if (pathComponents.length >= 3) {
     var dataURL = makeDataURL(user, repo);
     var xhr = new XMLHttpRequest();
 
-    // Show the loading indicator
-    createLoadingIndicator();
-
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
@@ -110,7 +107,6 @@ if (pathComponents.length >= 3) {
                             console.log(_logName,
                                         'Repository does not have any forks.');
                         }
-                        safeUpdateDOM(showNoForks, 'no forks');
                         return;
                     }
 
@@ -122,7 +118,6 @@ if (pathComponents.length >= 3) {
                             console.log(_logName,
                                         'Repo has only zero starred forks.');
                         }
-                        safeUpdateDOM(showNoForks, 'no notable forks');
                         return;
                     }
 
