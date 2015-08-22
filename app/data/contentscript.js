@@ -1,13 +1,24 @@
 'use strict';
 /*jshint browser: true, es5: true, sub:true */
 
-var pathComponents = window.location.pathname.split('/');
-var _logName = 'github-forks-extension:';
+var _logName = 'lovely-forks:';
 var DEBUG = false;
 var text;
 
 function emptyElem(elem) {
     elem.textContent = ''; // How jQuery does it
+}
+
+function makeTimeKey(user, repo) {
+    return 'lovely-forks@date:' + user + '/' + repo;
+}
+
+function makeDataKey(user, repo) {
+    return 'lovely-forks@data:' + user + '/' + repo;
+}
+
+function makeRemoteUpdatedKey(user, repo) {
+    return 'lovely-forks@remote-updated:' + user + '/' + repo;
 }
 
 function getForksElement() {
@@ -92,46 +103,59 @@ function makeDataURL(user, repo) {
                   user + '/' + repo + '/forks?sort=stargazers';
 }
 
-if (pathComponents.length >= 3) {
-    var user = pathComponents[1], repo = pathComponents[2];
+function processWithData(user, repo, dataStr, isFreshData) {
+    try {
+        var allForks = JSON.parse(dataStr);
+        if (!allForks || allForks.length < 1) {
+            if (DEBUG) {
+                console.log(_logName,
+                            'Repository does not have any forks.');
+            }
+            return;
+        }
+
+        var mostStarredFork = allForks[0],
+            starGazers = mostStarredFork['stargazers_count'];
+
+        if (!starGazers) {
+            if (DEBUG) {
+                console.log(_logName,
+                            'Repo has only zero starred forks.');
+            }
+            return;
+        }
+
+        var forkUrl = mostStarredFork['html_url'],
+            fullName = mostStarredFork['full_name'];
+
+        var remoteUpdateTimeMs = Date.parse(mostStarredFork['updated_at']);
+
+        if (isFreshData) {
+            var currentTimeMs = (new Date()).valueOf();
+
+            localStorage.setItem(makeTimeKey(user, repo), currentTimeMs);
+            localStorage.setItem(makeDataKey(user, repo), dataStr);
+            localStorage.setItem(makeRemoteUpdatedKey(user, repo),
+                                 remoteUpdateTimeMs);
+        }
+
+        safeUpdateDOM(showDetails(fullName, forkUrl, starGazers),
+                      'showing details');
+    } catch (e) {
+        console.warn(_logName,
+                     'Error while handling response: ',
+                     e);
+    }
+}
+
+function makeFreshRequest(user, repo) {
     var dataURL = makeDataURL(user, repo);
     var xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                try {
-                    var allForks = JSON.parse(xhr.responseText);
-                    if (!allForks || allForks.length < 1) {
-                        if (DEBUG) {
-                            console.log(_logName,
-                                        'Repository does not have any forks.');
-                        }
-                        return;
-                    }
-
-                    var mostStarredFork = allForks[0],
-                        starGazers = mostStarredFork['stargazers_count'];
-
-                    if (!starGazers) {
-                        if (DEBUG) {
-                            console.log(_logName,
-                                        'Repo has only zero starred forks.');
-                        }
-                        return;
-                    }
-
-                    var forkUrl = mostStarredFork['html_url'],
-                        fullName = mostStarredFork['full_name'];
-
-                    safeUpdateDOM(showDetails(fullName, forkUrl, starGazers),
-                                  'showing details');
-                } catch (e) {
-                    console.warn(_logName,
-                                 'Error while handling response: ',
-                                 e);
-                }
-
+                processWithData(user, repo, xhr.responseText, true);
             } else if (xhr.status === 403) {
                 console.warn(_logName,
                              'Looks like the rate-limit was exceeded.');
@@ -149,7 +173,63 @@ if (pathComponents.length >= 3) {
 
     xhr.open('GET', dataURL);
     xhr.send();
+}
+function getDataFor(user, repo) {
+    var lfTimeKey = makeTimeKey(user, repo),
+        lfDataKey = makeDataKey(user, repo);
 
+    var ret = { hasData: false };
+
+    var saveTime = localStorage.getItem(lfTimeKey);
+    if (saveTime !== null) {
+        // Save format is in milliseconds since epoch.
+        saveTime = new Date(parseInt(saveTime));
+    }
+
+    var savedData = localStorage.getItem(lfDataKey);
+    if (savedData === null || saveTime === null) {
+        return ret;
+    }
+
+    ret.hasData = true;
+    ret.saveTimeMs = saveTime;
+    ret.savedData = savedData;
+    return ret;
+}
+
+function runFor(user, repo) {
+    try {
+        var cache = getDataFor(user, repo),
+            currentTime = new Date();
+
+        // The time of expiry of data is set to be an hour ago
+        var expiryTimeMs = currentTime.valueOf() - 1000 * 60 * 60;
+
+        if (cache.hasData && cache.saveTimeMs > expiryTimeMs) {
+            if (DEBUG) {
+                console.log(_logName,
+                            'Reusing saved data.');
+            }
+            processWithData(user, repo, cache.savedData, false);
+        } else {
+            if (DEBUG) {
+                console.log(_logName,
+                            'Requesting the data from Github API.');
+            }
+            makeFreshRequest(user, repo);
+        }
+    } catch (e) {
+        console.error(_logName, 'Could not run for ', user + '/' + repo,
+                      'Exception: ', e);
+    }
+}
+
+/* Script execution */
+
+var pathComponents = window.location.pathname.split('/');
+if (pathComponents.length >= 3) {
+    var user = pathComponents[1], repo = pathComponents[2];
+    runFor(user, repo);
 } else {
     if (DEBUG) {
         console.log(_logName,
