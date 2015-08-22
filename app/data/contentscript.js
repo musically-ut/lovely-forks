@@ -9,16 +9,20 @@ function emptyElem(elem) {
     elem.textContent = ''; // How jQuery does it
 }
 
+function mbStrToMs(dateStr) {
+    return dateStr !== null ? Date.parse(dateStr) : null;
+}
+
 function makeTimeKey(user, repo) {
     return 'lovely-forks@date:' + user + '/' + repo;
 }
 
-function makeDataKey(user, repo) {
-    return 'lovely-forks@data:' + user + '/' + repo;
+function makeSelfDataKey(user, repo) {
+    return 'lovely-forks@self:' + user + '/' + repo;
 }
 
-function makeRemoteUpdatedKey(user, repo) {
-    return 'lovely-forks@remote-updated:' + user + '/' + repo;
+function makeRemoteDataKey(user, repo) {
+    return 'lovely-forks@remote:' + user + '/' + repo;
 }
 
 function getForksElement() {
@@ -73,7 +77,8 @@ function safeUpdateDOM(action, actionName) {
     }
 }
 
-function showDetails(fullName, url, numStars) {
+function showDetails(fullName, url, numStars,
+                     selfUpdateTimeMs, remoteUpdateTimeMs) {
     return function (text) {
         var starIcon = document.createElement('span');
         starIcon.classList.add('octicon', 'octicon-star');
@@ -90,6 +95,16 @@ function showDetails(fullName, url, numStars) {
         text.appendChild(starIcon);
         text.appendChild(document.createTextNode(numStars));
 
+        if (remoteUpdateTimeMs > selfUpdateTimeMs) {
+            var flameIcon = document.createElement('span');
+            flameIcon.classList.add('octicon', 'octicon-flame');
+            flameIcon.style.lineHeight = 0;
+            flameIcon.style.fontSize = '1.2em';
+            flameIcon.style.color = '#d26911';
+            flameIcon.title = 'Fork is more recent then upstream.';
+            text.appendChild(flameIcon);
+        }
+
         text.parentNode.classList.add('has-lovely-forks');
     };
 }
@@ -98,14 +113,22 @@ function showError(text) {
     text.appendChild(document.createTextNode('no information'));
 }
 
-function makeDataURL(user, repo) {
+function makeRemoteDataURL(user, repo) {
     return 'https://api.github.com/repos/' +
                   user + '/' + repo + '/forks?sort=stargazers';
 }
 
-function processWithData(user, repo, dataStr, isFreshData) {
+function makeSelfDataURL(user, repo) {
+    return 'https://api.github.com/repos/' +
+                  user + '/' + repo + '/commits';
+}
+
+
+function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
     try {
-        var allForks = JSON.parse(dataStr);
+        /* Parse fork data */
+        var allForks = JSON.parse(remoteDataStr);
+
         if (!allForks || allForks.length < 1) {
             if (DEBUG) {
                 console.log(_logName,
@@ -128,18 +151,43 @@ function processWithData(user, repo, dataStr, isFreshData) {
         var forkUrl = mostStarredFork['html_url'],
             fullName = mostStarredFork['full_name'];
 
-        var remoteUpdateTimeMs = Date.parse(mostStarredFork['updated_at']);
+        var remoteUpdateTimeMs = mbStrToMs(mostStarredFork['pushed_at']);
 
-        if (isFreshData) {
-            var currentTimeMs = (new Date()).valueOf();
+        /* Parse self data */
+        var allCommits = JSON.parse(selfDataStr);
 
-            localStorage.setItem(makeTimeKey(user, repo), currentTimeMs);
-            localStorage.setItem(makeDataKey(user, repo), dataStr);
-            localStorage.setItem(makeRemoteUpdatedKey(user, repo),
-                                 remoteUpdateTimeMs);
+        if (!allCommits || allCommits.length < 1) {
+            if (DEBUG) {
+                console.log(_logName,
+                            'Repository does not have any commits.');
+            }
+            return;
         }
 
-        safeUpdateDOM(showDetails(fullName, forkUrl, starGazers),
+        var latestCommit = allCommits[0]['commit'];
+        var committer = latestCommit['committer'];
+
+        if (!committer) {
+            if (DEBUG) {
+                console.error(_logName,
+                              'Could not find the latest committer.');
+            }
+            return;
+        }
+
+        var selfUpdateTimeMs   = mbStrToMs(committer['date']);
+
+        /* Cache data, if necessary */
+        if (isFreshData) {
+            var currentTimeMs = (new Date()).toString();
+
+            localStorage.setItem(makeTimeKey(user, repo), currentTimeMs);
+            localStorage.setItem(makeRemoteDataKey(user, repo), remoteDataStr);
+            localStorage.setItem(makeSelfDataKey(user, repo), selfDataStr);
+        }
+
+        safeUpdateDOM(showDetails(fullName, forkUrl, starGazers,
+                                  selfUpdateTimeMs, remoteUpdateTimeMs),
                       'showing details');
     } catch (e) {
         console.warn(_logName,
@@ -148,14 +196,11 @@ function processWithData(user, repo, dataStr, isFreshData) {
     }
 }
 
-function makeFreshRequest(user, repo) {
-    var dataURL = makeDataURL(user, repo);
-    var xhr = new XMLHttpRequest();
-
-    xhr.onreadystatechange = function () {
+function onreadystateChangeFactory(xhr, successFn) {
+    return function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                processWithData(user, repo, xhr.responseText, true);
+                successFn();
             } else if (xhr.status === 403) {
                 console.warn(_logName,
                              'Looks like the rate-limit was exceeded.');
@@ -170,30 +215,69 @@ function makeFreshRequest(user, repo) {
             // Do nothing.
         }
     };
-
-    xhr.open('GET', dataURL);
-    xhr.send();
 }
+
+function makeFreshRequest(user, repo) {
+    var xhrRemote = new XMLHttpRequest(),
+        xhrSelf   = new XMLHttpRequest();
+
+    var remoteDone = false, remoteDataStr = null,
+        selfDone = false, selfDataStr = null;
+
+    xhrRemote.onreadystatechange = onreadystateChangeFactory(
+        xhrRemote,
+        function () {
+            remoteDone = true;
+            remoteDataStr = xhrRemote.responseText;
+            if (selfDone) {
+                processWithData(user, repo, remoteDataStr, selfDataStr, true);
+            }
+        }
+    );
+
+    xhrSelf.onreadystatechange = onreadystateChangeFactory(
+        xhrSelf,
+        function () {
+            selfDone = true;
+            selfDataStr = xhrSelf.responseText;
+            if (remoteDone) {
+                processWithData(user, repo, remoteDataStr, selfDataStr, true);
+            }
+        }
+    );
+
+
+    var remoteDataURL = makeRemoteDataURL(user, repo),
+        selfDataURL   = makeSelfDataURL(user, repo);
+    xhrRemote.open('GET', remoteDataURL);
+    xhrRemote.send();
+
+    xhrSelf.open('GET', selfDataURL);
+    xhrSelf.send();
+}
+
 function getDataFor(user, repo) {
     var lfTimeKey = makeTimeKey(user, repo),
-        lfDataKey = makeDataKey(user, repo);
+        lfRemoteDataKey = makeRemoteDataKey(user, repo),
+        lfSelfDataKey = makeSelfDataKey(user, repo);
 
     var ret = { hasData: false };
 
-    var saveTime = localStorage.getItem(lfTimeKey);
-    if (saveTime !== null) {
-        // Save format is in milliseconds since epoch.
-        saveTime = new Date(parseInt(saveTime));
-    }
+    var savedRemoteDataStr = localStorage.getItem(lfRemoteDataKey);
+    var savedSelfDataStr   = localStorage.getItem(lfSelfDataKey);
+    var saveTimeMs         = mbStrToMs(localStorage.getItem(lfTimeKey));
 
-    var savedData = localStorage.getItem(lfDataKey);
-    if (savedData === null || saveTime === null) {
+    if (saveTimeMs         === null ||
+        savedRemoteDataStr === null ||
+        savedSelfDataStr   === null) {
         return ret;
     }
 
-    ret.hasData = true;
-    ret.saveTimeMs = saveTime;
-    ret.savedData = savedData;
+    ret.hasData            = true;
+    ret.saveTimeMs         = saveTimeMs;
+    ret.savedRemoteDataStr = savedRemoteDataStr;
+    ret.savedSelfDataStr   = savedSelfDataStr;
+
     return ret;
 }
 
@@ -210,7 +294,9 @@ function runFor(user, repo) {
                 console.log(_logName,
                             'Reusing saved data.');
             }
-            processWithData(user, repo, cache.savedData, false);
+            processWithData(user, repo,
+                            cache.savedRemoteDataStr, cache.savedSelfDataStr,
+                            false);
         } else {
             if (DEBUG) {
                 console.log(_logName,
