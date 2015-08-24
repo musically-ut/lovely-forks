@@ -101,7 +101,7 @@ function showDetails(fullName, url, numStars,
             flameIcon.style.lineHeight = 0;
             flameIcon.style.fontSize = '1.2em';
             flameIcon.style.color = '#d26911';
-            flameIcon.title = 'Fork is more recent then upstream.';
+            flameIcon.title = 'Fork is more recent than upstream.';
             text.appendChild(flameIcon);
         }
 
