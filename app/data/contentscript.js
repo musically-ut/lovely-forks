@@ -2,7 +2,7 @@
 /*jshint browser: true, es5: true, sub:true */
 
 var _logName = 'lovely-forks:';
-var DEBUG = true;
+var DEBUG = false;
 var text;
 
 function emptyElem(elem) {
@@ -265,7 +265,7 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
                                      relevantSelfDataStr);
             } catch(e) {
                 if (isQuotaExceeded(e)) {
-                    console.warn(_logName, 'Local storage quote full.');
+                    console.warn(_logName, 'localStorage quota full.');
                 } else {
                     throw e;
                 }
