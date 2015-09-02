@@ -2,7 +2,7 @@
 /*jshint browser: true, es5: true, sub:true */
 
 var _logName = 'lovely-forks:';
-var DEBUG = false;
+var DEBUG = true;
 var text;
 
 function emptyElem(elem) {
@@ -13,8 +13,13 @@ function mbStrToMs(dateStr) {
     return dateStr !== null ? Date.parse(dateStr) : null;
 }
 
-function makeTimeKey(user, repo) {
-    return 'lovely-forks@date:' + user + '/' + repo;
+function isExpired(timeMs) {
+    var currentTime = new Date();
+
+    // The time of expiry of data is set to be an hour ago
+    var expiryTimeMs = currentTime.valueOf() - 1000 * 60 * 60;
+
+    return timeMs < expiryTimeMs;
 }
 
 function makeSelfDataKey(user, repo) {
@@ -23,6 +28,20 @@ function makeSelfDataKey(user, repo) {
 
 function makeRemoteDataKey(user, repo) {
     return 'lovely-forks@remote:' + user + '/' + repo;
+}
+
+var reDateKey = new RegExp('^lovely-forks@date:(.*)/(.*)$');
+function makeTimeKey(user, repo) {
+    return 'lovely-forks@date:' + user + '/' + repo;
+}
+
+function parseTimeKey(key) {
+    var match = reDateKey.exec(key);
+    if (match !== null) {
+        return [match[1], match[2]];
+    } else {
+        return null;
+    }
 }
 
 function getForksElement() {
@@ -54,6 +73,40 @@ function getForksElement() {
         console.warn(_logName,
                      'Looks like the layout of the Github page has changed.');
     }
+}
+
+function clearLocalStorage() {
+    var keysToUnset = [];
+
+    /* Remove all items which have expired. */
+    for(var ii = 0; ii < localStorage.length; ii++) {
+        var key = localStorage.key(ii);
+        var mbUserRepo = parseTimeKey(key);
+        if (mbUserRepo !== null) {
+
+            var timeMs = mbStrToMs(localStorage.getItem(key));
+
+            if (timeMs && isExpired(timeMs)) {
+                var user = mbUserRepo[0],
+                    repo = mbUserRepo[1];
+                keysToUnset.push(makeRemoteDataKey(user, repo));
+                keysToUnset.push(makeSelfDataKey(user, repo));
+                keysToUnset.push(makeTimeKey(user, repo));
+            } else {
+                console.warn(_logName,
+                             'Unable to parse time: ',
+                             localStorage.getItem(key));
+            }
+        }
+    }
+
+    keysToUnset.forEach(function (key) {
+        if (DEBUG) {
+            console.log(_logName,
+                        'Removing key: ', key);
+        }
+        localStorage.removeItem(key);
+    });
 }
 
 function safeUpdateDOM(action, actionName) {
@@ -123,6 +176,26 @@ function makeSelfDataURL(user, repo) {
                   user + '/' + repo + '/commits';
 }
 
+// From: http://crocodillon.com/blog/always-catch-localstorage-security-and-quota-exceeded-errors
+function isQuotaExceeded(e) {
+    var quotaExceeded = false;
+    if (e) {
+        if (e.code) {
+            switch (e.code) {
+                case 22:
+                    quotaExceeded = true;
+                    break;
+                case 1014:
+                    // Firefox
+                    if (e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+                        quotaExceeded = true;
+                    }
+                    break;
+            }
+        }
+    }
+    return quotaExceeded;
+}
 
 function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
     try {
@@ -181,9 +254,18 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
         if (isFreshData) {
             var currentTimeMs = (new Date()).toString();
 
-            localStorage.setItem(makeTimeKey(user, repo), currentTimeMs);
-            localStorage.setItem(makeRemoteDataKey(user, repo), remoteDataStr);
-            localStorage.setItem(makeSelfDataKey(user, repo), selfDataStr);
+            try {
+                clearLocalStorage();
+                localStorage.setItem(makeTimeKey(user, repo), currentTimeMs);
+                localStorage.setItem(makeRemoteDataKey(user, repo), remoteDataStr);
+                localStorage.setItem(makeSelfDataKey(user, repo), selfDataStr);
+            } catch(e) {
+                if (isQuotaExceeded(e)) {
+                    console.warn(_logName, 'Local storage quote full.');
+                } else {
+                    throw e;
+                }
+            }
         }
 
         safeUpdateDOM(showDetails(fullName, forkUrl, starGazers,
@@ -283,13 +365,8 @@ function getDataFor(user, repo) {
 
 function runFor(user, repo) {
     try {
-        var cache = getDataFor(user, repo),
-            currentTime = new Date();
-
-        // The time of expiry of data is set to be an hour ago
-        var expiryTimeMs = currentTime.valueOf() - 1000 * 60 * 60;
-
-        if (cache.hasData && cache.saveTimeMs > expiryTimeMs) {
+        var cache = getDataFor(user, repo);
+        if (cache.hasData && isExpired(cache.saveTimeMs)) {
             if (DEBUG) {
                 console.log(_logName,
                             'Reusing saved data.');
