@@ -18,7 +18,6 @@ function isExpired(timeMs) {
 
     // The time of expiry of data is set to be an hour ago
     var expiryTimeMs = currentTime.valueOf() - 1000 * 60 * 60;
-
     return timeMs < expiryTimeMs;
 }
 
@@ -86,12 +85,14 @@ function clearLocalStorage() {
 
             var timeMs = mbStrToMs(localStorage.getItem(key));
 
-            if (timeMs && isExpired(timeMs)) {
-                var user = mbUserRepo[0],
-                    repo = mbUserRepo[1];
-                keysToUnset.push(makeRemoteDataKey(user, repo));
-                keysToUnset.push(makeSelfDataKey(user, repo));
-                keysToUnset.push(makeTimeKey(user, repo));
+            if (timeMs) {
+                if (isExpired(timeMs)) {
+                    var user = mbUserRepo[0],
+                        repo = mbUserRepo[1];
+                    keysToUnset.push(makeRemoteDataKey(user, repo));
+                    keysToUnset.push(makeSelfDataKey(user, repo));
+                    keysToUnset.push(makeTimeKey(user, repo));
+                }
             } else {
                 console.warn(_logName,
                              'Unable to parse time: ',
@@ -210,16 +211,7 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
             return;
         }
 
-        var mostStarredFork = allForks[0],
-            starGazers = mostStarredFork['stargazers_count'];
-
-        if (!starGazers) {
-            if (DEBUG) {
-                console.log(_logName,
-                            'Repo has only zero starred forks.');
-            }
-            return;
-        }
+        var mostStarredFork = allForks[0];
 
         var forkUrl = mostStarredFork['html_url'],
             fullName = mostStarredFork['full_name'];
@@ -254,11 +246,23 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
         if (isFreshData) {
             var currentTimeMs = (new Date()).toString();
 
+            if (DEBUG) {
+                console.log(_logName, 'Saving data');
+            }
+
             try {
                 clearLocalStorage();
                 localStorage.setItem(makeTimeKey(user, repo), currentTimeMs);
-                localStorage.setItem(makeRemoteDataKey(user, repo), remoteDataStr);
-                localStorage.setItem(makeSelfDataKey(user, repo), selfDataStr);
+
+                // Only the most starred fork is relevant
+                var relevantRemoteDataStr = JSON.stringify([mostStarredFork]);
+                localStorage.setItem(makeRemoteDataKey(user, repo),
+                                     relevantRemoteDataStr);
+
+                // Only the latest commit is relevant
+                var relevantSelfDataStr = JSON.stringify([allCommits[0]]);
+                localStorage.setItem(makeSelfDataKey(user, repo),
+                                     relevantSelfDataStr);
             } catch(e) {
                 if (isQuotaExceeded(e)) {
                     console.warn(_logName, 'Local storage quote full.');
@@ -266,6 +270,18 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
                     throw e;
                 }
             }
+        }
+
+        // Now if the repository doesn't have any notable forks, so not
+        // touch the DOM.
+        var starGazers = mostStarredFork['stargazers_count'];
+
+        if (!starGazers) {
+            if (DEBUG) {
+                console.log(_logName,
+                            'Repo has only zero starred forks.');
+            }
+            return;
         }
 
         safeUpdateDOM(showDetails(fullName, forkUrl, starGazers,
@@ -366,7 +382,7 @@ function getDataFor(user, repo) {
 function runFor(user, repo) {
     try {
         var cache = getDataFor(user, repo);
-        if (cache.hasData && isExpired(cache.saveTimeMs)) {
+        if (cache.hasData && !isExpired(cache.saveTimeMs)) {
             if (DEBUG) {
                 console.log(_logName,
                             'Reusing saved data.');
