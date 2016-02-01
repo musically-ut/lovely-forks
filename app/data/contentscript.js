@@ -5,6 +5,40 @@ var _logName = 'lovely-forks:';
 var DEBUG = false;
 var text;
 
+var svgNS = "http://www.w3.org/2000/svg";
+
+function createIconSVG(type) {
+    var svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttributeNS(null, 'height', 14);
+    svg.setAttributeNS(null, 'width', 12);
+    svg.setAttributeNS(null, 'viewBox', "0 0 14 16");
+    svg.style['vertical-align'] = 'bottom';
+    svg.style['fill'] = 'currentColor';
+
+    svg.classList.add('opticon', 'opticon-' + type);
+
+    var title = document.createElementNS(svgNS, 'title');
+
+    var iconPath = document.createElementNS(svgNS, 'path');
+    switch(type) {
+        case "star":
+            title.appendChild(document.createTextNode('Number of stars'));
+            iconPath.setAttributeNS(null, 'd', 'M14 6l-4.9-0.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14l4.33-2.33 4.33 2.33L10.4 9.26 14 6z');
+            break;
+        case "flame":
+            title.appendChild(document.createTextNode('Fork is more recent than upstream.'));
+            iconPath.setAttributeNS(null, 'd',  'M5.05 0.31c0.81 2.17 0.41 3.38-0.52 4.31-0.98 1.05-2.55 1.83-3.63 3.36-1.45 2.05-1.7 6.53 3.53 7.7-2.2-1.16-2.67-4.52-0.3-6.61-0.61 2.03 0.53 3.33 1.94 2.86 1.39-0.47 2.3 0.53 2.27 1.67-0.02 0.78-0.31 1.44-1.13 1.81 3.42-0.59 4.78-3.42 4.78-5.56 0-2.84-2.53-3.22-1.25-5.61-1.52 0.13-2.03 1.13-1.89 2.75 0.09 1.08-1.02 1.8-1.86 1.33-0.67-0.41-0.66-1.19-0.06-1.78 1.25-1.23 1.75-4.09-1.88-6.22l-0.02-0.02z');
+            iconPath.setAttributeNS(null, 'fill', '#d26911');
+            break;
+    }
+
+    iconPath.appendChild(title);
+    svg.appendChild(iconPath);
+
+    return svg;
+}
+
+
 function emptyElem(elem) {
     elem.textContent = ''; // How jQuery does it
 }
@@ -134,11 +168,6 @@ function safeUpdateDOM(action, actionName) {
 function showDetails(fullName, url, numStars,
                      selfUpdateTimeMs, remoteUpdateTimeMs) {
     return function (text) {
-        var starIcon = document.createElement('span');
-        starIcon.classList.add('octicon', 'octicon-star');
-        starIcon.style.lineHeight = 0; // for alignment
-        starIcon.style.fontSize = '1.2em';
-
         var forkA = document.createElement('a');
         forkA.href = url;
         forkA.appendChild(document.createTextNode(fullName));
@@ -146,17 +175,11 @@ function showDetails(fullName, url, numStars,
         text.appendChild(document.createTextNode('also forked to '));
         text.appendChild(forkA);
         text.appendChild(document.createTextNode(' '));
-        text.appendChild(starIcon);
-        text.appendChild(document.createTextNode(numStars));
+        text.appendChild(createIconSVG('star'));
+        text.appendChild(document.createTextNode('' + numStars + ' '));
 
         if (remoteUpdateTimeMs > selfUpdateTimeMs) {
-            var flameIcon = document.createElement('span');
-            flameIcon.classList.add('octicon', 'octicon-flame');
-            flameIcon.style.lineHeight = 0;
-            flameIcon.style.fontSize = '1.2em';
-            flameIcon.style.color = '#d26911';
-            flameIcon.title = 'Fork is more recent than upstream.';
-            text.appendChild(flameIcon);
+            text.appendChild(createIconSVG('flame'));
         }
 
         text.parentNode.classList.add('has-lovely-forks');
