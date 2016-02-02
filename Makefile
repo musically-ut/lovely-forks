@@ -2,6 +2,7 @@
 
 VERSION=$(shell git describe --dirty)
 ARCHIVE_NAME=lovely-forks-${VERSION}.zip
+PWD=$(shell pwd)
 
 all: firefox chrome
 
@@ -13,7 +14,7 @@ firefox: chrome
 	@rm -rf .tmp
 	@mkdir -p .tmp
 	@unzip -q ${ARCHIVE_NAME} -d .tmp
-	@cfx xpi --pkgdir=.tmp/app --force-mobile
+	@jpm  --addon-dir=${PWD}/.tmp/app xpi
 
 devel:
 	@echo "Doing a development build."
@@ -21,7 +22,7 @@ devel:
 	@rm -rf .tmp
 	@mkdir -p .tmp
 	@unzip -q ${ARCHIVE_NAME} -d .tmp
-	@cfx xpi --pkgdir=.tmp/app --force-mobile
+	@jpm --addon-dir=${PWD}/.tmp/app xpi -v
 
 
 
