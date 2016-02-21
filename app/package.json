@@ -5,7 +5,7 @@
     "description": "Show notable forks of Github projects.",
     "author": "Utkarsh Upadhyay",
     "license": "MPL 2.0",
-    "version": "2.2.1",
+    "version": "2.3.0",
     "icon": "data/images/Heart_and_fork_inside_128.png",
     "main": "lib/main.js",
     "engines": {
