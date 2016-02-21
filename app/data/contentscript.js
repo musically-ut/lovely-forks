@@ -9,8 +9,8 @@ var svgNS = "http://www.w3.org/2000/svg";
 
 function createIconSVG(type) {
     var svg = document.createElementNS(svgNS, 'svg');
-    svg.setAttributeNS(null, 'height', 14);
-    svg.setAttributeNS(null, 'width', 12);
+    svg.setAttributeNS(null, 'height', 12);
+    svg.setAttributeNS(null, 'width', 10.5);
     svg.setAttributeNS(null, 'viewBox', "0 0 14 16");
     svg.style['vertical-align'] = 'bottom';
     svg.style['fill'] = 'currentColor';
