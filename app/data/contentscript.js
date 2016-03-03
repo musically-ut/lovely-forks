@@ -186,10 +186,6 @@ function showDetails(fullName, url, numStars,
     };
 }
 
-function showError(text) {
-    text.appendChild(document.createTextNode('no information'));
-}
-
 function makeRemoteDataURL(user, repo) {
     return 'https://api.github.com/repos/' +
                   user + '/' + repo + '/forks?sort=stargazers';
@@ -326,11 +322,9 @@ function onreadystateChangeFactory(xhr, successFn) {
             } else if (xhr.status === 403) {
                 console.warn(_logName,
                              'Looks like the rate-limit was exceeded.');
-                safeUpdateDOM(showError, 'rate limit exceeded');
             } else {
                 console.warn(_logName,
                              'Github API returned status:', xhr.status);
-                safeUpdateDOM(showError, 'showing error');
             }
         } else {
             // Request is still in progress
