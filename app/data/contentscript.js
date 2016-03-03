@@ -2,7 +2,7 @@
 /*jshint browser: true, es5: true, sub:true */
 
 var _logName = 'lovely-forks:';
-var DEBUG = false;
+var DEBUG = true;
 var text;
 
 var svgNS = "http://www.w3.org/2000/svg";
@@ -196,7 +196,7 @@ function makeRemoteDataURL(user, repo) {
 }
 
 function makeSelfDataURL(user, repo) {
-    return 'https://api.github.com/repos/' + user + '/' + repo;
+    return 'https://api.github.com/repos/' + user + '/' + repo + '/commits';
 }
 
 // From: http://crocodillon.com/blog/always-catch-localstorage-security-and-quota-exceeded-errors
@@ -242,48 +242,29 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
 
         /* Parse self data */
         /* This could either be the repo data (v1) or `all_commits` data (v2). */
-        var selfData = JSON.parse(selfDataStr);
-        var selfDataToSave = null;
+        var allCommits = JSON.parse(selfDataStr);
 
-        var selfUpdateTimeMs = null;
-        if (selfData.hasOwnProperty('pushed_at')) {
-            /* This is not an array, but the repository data. */
-            selfUpdateTimeMs = mbStrToMs(selfData['pushed_at']);
-            selfDataToSave = selfData;
-        } else {
-            /* This is the old all-commits data. */
-            var allCommits = selfData;
-            if (!allCommits || allCommits.length < 1) {
-                if (DEBUG) {
-                    console.log(_logName,
-                                'Repository does not have any commits.');
-                }
-                return;
-            }
-
-            var latestCommit = allCommits[0]['commit'];
-            var committer = latestCommit['committer'];
-
-            if (!committer) {
-                if (DEBUG) {
-                    console.error(_logName,
-                                  'Could not find the latest committer.');
-                }
-                return;
-            }
-
-            selfUpdateTimeMs = mbStrToMs(committer['date']);
-            selfDataToSave = [allCommits[0]];
-        }
-
-        if (!selfUpdateTimeMs) {
+        if (!allCommits || allCommits.length < 1) {
             if (DEBUG) {
-                console.error(_logName,
-                              'Could not find the selfUpdateTimeMs.');
+                console.log(_logName,
+                            'Repository does not have any commits.');
             }
             return;
         }
 
+        var latestCommit = allCommits[0]['commit'];
+        var committer = latestCommit['committer'];
+
+        if (!committer) {
+            if (DEBUG) {
+                console.error(_logName,
+                              'Could not find the latest committer.');
+            }
+            return;
+        }
+
+        var selfUpdateTimeMs = mbStrToMs(committer['date']);
+        var selfDataToSave = [allCommits[0]];
 
         /* Cache data, if necessary */
         if (isFreshData) {
