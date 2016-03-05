@@ -38,7 +38,6 @@ function createIconSVG(type) {
     return svg;
 }
 
-
 function emptyElem(elem) {
     elem.textContent = ''; // How jQuery does it
 }
@@ -62,6 +61,7 @@ function makeSelfDataKey(user, repo) {
 function makeRemoteDataKey(user, repo) {
     return 'lovely-forks@remote:' + user + '/' + repo;
 }
+
 
 var reDateKey = new RegExp('^lovely-forks@date:(.*)/(.*)$');
 function makeTimeKey(user, repo) {
@@ -165,8 +165,7 @@ function safeUpdateDOM(action, actionName) {
     }
 }
 
-function showDetails(fullName, url, numStars,
-                     selfUpdateTimeMs, remoteUpdateTimeMs) {
+function showDetails(fullName, url, numStars, remoteIsNewer) {
     return function (text) {
         var forkA = document.createElement('a');
         forkA.href = url;
@@ -178,7 +177,7 @@ function showDetails(fullName, url, numStars,
         text.appendChild(createIconSVG('star'));
         text.appendChild(document.createTextNode('' + numStars + ' '));
 
-        if (remoteUpdateTimeMs > selfUpdateTimeMs) {
+        if (remoteIsNewer) {
             text.appendChild(createIconSVG('flame'));
         }
 
@@ -191,9 +190,13 @@ function makeRemoteDataURL(user, repo) {
                   user + '/' + repo + '/forks?sort=stargazers';
 }
 
-function makeSelfDataURL(user, repo) {
-    return 'https://api.github.com/repos/' + user + '/' + repo + '/commits';
+function makeCommitDiffURL(user, repo, remoteUser, default_branch) {
+    return 'https://api.github.com/repos/' +
+                  user + '/' + repo + '/compare/' +
+                  user + ':' + default_branch + '...' +
+                  remoteUser + ':' + default_branch;
 }
+
 
 // From: http://crocodillon.com/blog/always-catch-localstorage-security-and-quota-exceeded-errors
 function isQuotaExceeded(e) {
@@ -219,48 +222,54 @@ function isQuotaExceeded(e) {
 function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
     try {
         /* Parse fork data */
-        var allForks = JSON.parse(remoteDataStr);
-
-        if (!allForks || allForks.length < 1) {
-            if (DEBUG) {
-                console.log(_logName,
-                            'Repository does not have any forks.');
-            }
-            return;
-        }
-
-        var mostStarredFork = allForks[0];
+        /* Can either be just one data element,
+         * or could be the list of all forks. */
+        var allForksData = JSON.parse(remoteDataStr);
+        var mostStarredFork = allForksData[0];
 
         var forkUrl = mostStarredFork['html_url'],
             fullName = mostStarredFork['full_name'];
 
-        var remoteUpdateTimeMs = mbStrToMs(mostStarredFork['pushed_at']);
-
         /* Parse self data */
-        /* This could either be the repo data (v1) or `all_commits` data (v2). */
-        var allCommits = JSON.parse(selfDataStr);
+        /* This could either be the commit-diff data (v2)
+         * or `all_commits` data (v1). */
+        var selfData = JSON.parse(selfDataStr),
+            selfDataToSave = selfData,
+            remoteIsNewer = false;
 
-        if (!allCommits || allCommits.length < 1) {
-            if (DEBUG) {
-                console.log(_logName,
-                            'Repository does not have any commits.');
+        if (selfData.hasOwnProperty('ahead_by')) {
+            // New version
+            var diffData = selfData;
+            remoteIsNewer = (diffData['ahead_by'] - diffData['behind_by']) > 0;
+        } else {
+            // Old version
+            var allCommits = selfData;
+            var remoteUpdateTimeMs = mbStrToMs(mostStarredFork['pushed_at']);
+
+            if (!allCommits || allCommits.length < 1) {
+                if (DEBUG) {
+                    console.log(_logName,
+                                'Repository does not have any commits.');
+                }
+                return;
             }
-            return;
-        }
 
-        var latestCommit = allCommits[0]['commit'];
-        var committer = latestCommit['committer'];
+            var latestCommit = allCommits[0]['commit'];
+            var committer = latestCommit['committer'];
 
-        if (!committer) {
-            if (DEBUG) {
-                console.error(_logName,
-                              'Could not find the latest committer.');
+            if (!committer) {
+                if (DEBUG) {
+                    console.error(_logName,
+                                  'Could not find the latest committer.');
+                }
+                return;
             }
-            return;
-        }
 
-        var selfUpdateTimeMs = mbStrToMs(committer['date']);
-        var selfDataToSave = [allCommits[0]];
+            var selfUpdateTimeMs = mbStrToMs(committer['date']);
+
+            remoteIsNewer = remoteUpdateTimeMs > selfUpdateTimeMs;
+            selfDataToSave = [allCommits[0]];
+        }
 
         /* Cache data, if necessary */
         if (isFreshData) {
@@ -305,7 +314,7 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
         }
 
         safeUpdateDOM(showDetails(fullName, forkUrl, starGazers,
-                                  selfUpdateTimeMs, remoteUpdateTimeMs),
+                                  remoteIsNewer),
                       'showing details');
     } catch (e) {
         console.warn(_logName,
@@ -314,7 +323,7 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
     }
 }
 
-function onreadystateChangeFactory(xhr, successFn) {
+function onreadystatechangeFactory(xhr, successFn) {
     return function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
@@ -334,48 +343,52 @@ function onreadystateChangeFactory(xhr, successFn) {
 }
 
 function makeFreshRequest(user, repo) {
-    var xhrRemote = new XMLHttpRequest(),
-        xhrSelf   = new XMLHttpRequest();
+    var xhrFork = new XMLHttpRequest();
 
-    var remoteDone = false, remoteDataStr = null,
-        selfDone = false, selfDataStr = null;
-
-    xhrRemote.onreadystatechange = onreadystateChangeFactory(
-        xhrRemote,
+    xhrFork.onreadystatechange = onreadystatechangeFactory(
+        xhrFork,
         function () {
-            remoteDone = true;
-            remoteDataStr = xhrRemote.responseText;
-            if (selfDone) {
-                processWithData(user, repo, remoteDataStr, selfDataStr, true);
+            var forksDataJson = JSON.parse(xhrFork.responseText);
+            if (!forksDataJson || forksDataJson.length === 0) {
+                if (DEBUG) {
+                    console.log(_logName,
+                                'Repository does not have any forks.');
+                }
+                return;
             }
+
+            var mostStarredFork = forksDataJson[0],
+                forksDataStr = JSON.stringify([mostStarredFork]);
+
+            var defaultBranch = mostStarredFork['default_branch'],
+                remoteUser    = mostStarredFork['owner']['login'];
+
+            var xhrDiff = new XMLHttpRequest();
+
+            xhrDiff.onreadystatechange = onreadystatechangeFactory(
+                xhrDiff,
+                function () {
+                    var commitDiffJson = JSON.parse(xhrDiff.responseText);
+                    // Dropping the list of commits to conserve space.
+                    commitDiffJson['commits'] = [];
+                    var commitDiffStr = JSON.stringify(commitDiffJson);
+                    processWithData(user, repo, forksDataStr, commitDiffStr, true);
+                }
+            );
+
+            xhrDiff.open('GET', makeCommitDiffURL(user, repo, remoteUser, defaultBranch));
+            xhrDiff.send();
         }
     );
 
-    xhrSelf.onreadystatechange = onreadystateChangeFactory(
-        xhrSelf,
-        function () {
-            selfDone = true;
-            selfDataStr = xhrSelf.responseText;
-            if (remoteDone) {
-                processWithData(user, repo, remoteDataStr, selfDataStr, true);
-            }
-        }
-    );
-
-
-    var remoteDataURL = makeRemoteDataURL(user, repo),
-        selfDataURL   = makeSelfDataURL(user, repo);
-    xhrRemote.open('GET', remoteDataURL);
-    xhrRemote.send();
-
-    xhrSelf.open('GET', selfDataURL);
-    xhrSelf.send();
+    xhrFork.open('GET', makeRemoteDataURL(user, repo));
+    xhrFork.send();
 }
 
 function getDataFor(user, repo) {
-    var lfTimeKey = makeTimeKey(user, repo),
+    var lfTimeKey       = makeTimeKey(user, repo),
         lfRemoteDataKey = makeRemoteDataKey(user, repo),
-        lfSelfDataKey = makeSelfDataKey(user, repo);
+        lfSelfDataKey   = makeSelfDataKey(user, repo);
 
     var ret = { hasData: false };
 
