@@ -2,7 +2,7 @@
 /*jshint browser: true, es5: true, sub:true */
 
 var _logName = 'lovely-forks:';
-var DEBUG = true;
+var DEBUG = false;
 var text;
 
 var svgNS = 'http://www.w3.org/2000/svg';
@@ -233,42 +233,48 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
         /* Parse self data */
         /* This could either be the commit-diff data (v2)
          * or `all_commits` data (v1). */
+        /* selfData can also be null, if the commit difference API resulted in
+         * an error. */
         var selfData = JSON.parse(selfDataStr),
             selfDataToSave = selfData,
             remoteIsNewer = false;
 
-        if (selfData.hasOwnProperty('ahead_by')) {
-            // New version
-            var diffData = selfData;
-            remoteIsNewer = (diffData['ahead_by'] - diffData['behind_by']) > 0;
+        if (selfData !== null) {
+            if (selfData.hasOwnProperty('ahead_by')) {
+                // New version
+                var diffData = selfData;
+                remoteIsNewer = (diffData['ahead_by'] - diffData['behind_by']) > 0;
+            } else {
+                // Old version
+                var allCommits = selfData;
+                var remoteUpdateTimeMs = mbStrToMs(mostStarredFork['pushed_at']);
+
+                if (!allCommits || allCommits.length < 1) {
+                    if (DEBUG) {
+                        console.log(_logName,
+                                    'Repository does not have any commits.');
+                    }
+                    return;
+                }
+
+                var latestCommit = allCommits[0]['commit'];
+                var committer = latestCommit['committer'];
+
+                if (!committer) {
+                    if (DEBUG) {
+                        console.error(_logName,
+                                      'Could not find the latest committer.');
+                    }
+                    return;
+                }
+
+                var selfUpdateTimeMs = mbStrToMs(committer['date']);
+
+                remoteIsNewer = remoteUpdateTimeMs > selfUpdateTimeMs;
+                selfDataToSave = [allCommits[0]];
+            }
         } else {
-            // Old version
-            var allCommits = selfData;
-            var remoteUpdateTimeMs = mbStrToMs(mostStarredFork['pushed_at']);
-
-            if (!allCommits || allCommits.length < 1) {
-                if (DEBUG) {
-                    console.log(_logName,
-                                'Repository does not have any commits.');
-                }
-                return;
-            }
-
-            var latestCommit = allCommits[0]['commit'];
-            var committer = latestCommit['committer'];
-
-            if (!committer) {
-                if (DEBUG) {
-                    console.error(_logName,
-                                  'Could not find the latest committer.');
-                }
-                return;
-            }
-
-            var selfUpdateTimeMs = mbStrToMs(committer['date']);
-
-            remoteIsNewer = remoteUpdateTimeMs > selfUpdateTimeMs;
-            selfDataToSave = [allCommits[0]];
+            remoteIsNewer = false;
         }
 
         /* Cache data, if necessary */
@@ -365,16 +371,20 @@ function makeFreshRequest(user, repo) {
 
             var xhrDiff = new XMLHttpRequest();
 
-            xhrDiff.onreadystatechange = onreadystatechangeFactory(
-                xhrDiff,
-                function () {
-                    var commitDiffJson = JSON.parse(xhrDiff.responseText);
-                    // Dropping the list of commits to conserve space.
-                    commitDiffJson['commits'] = [];
-                    var commitDiffStr = JSON.stringify(commitDiffJson);
-                    processWithData(user, repo, forksDataStr, commitDiffStr, true);
+            xhrDiff.onreadystatechange = function () {
+                if (xhrDiff.readyState === 4) {
+                    if (xhrDiff.status === 200) {
+                        var commitDiffJson = JSON.parse(xhrDiff.responseText);
+                        // Dropping the list of commits to conserve space.
+                        commitDiffJson['commits'] = [];
+                        var commitDiffStr = JSON.stringify(commitDiffJson);
+                        processWithData(user, repo, forksDataStr, commitDiffStr, true);
+                    } else {
+                        // In case of any error, ignore recency data.
+                        processWithData(user, repo, forksDataStr, null, true);
+                    }
                 }
-            );
+            };
 
             xhrDiff.open('GET', makeCommitDiffURL(user, repo, remoteUser, defaultBranch));
             xhrDiff.send();
