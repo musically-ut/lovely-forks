@@ -20,6 +20,10 @@ of the repository on the Github page of the project with a link to the most
 notable fork (i.e. the fork with the most stars and at least one star), if such
 a fork exists.
 
+Also, if the fork is _more recent_ than the upstream, a flame icon is shown
+next to it. These are called called [_flamey forks_](https://github.com/musically-ut/lovely-forks/issues/13) 
+as suggested by [Mottie](https://github.com/Mottie).
+
 ## Screenshots
 
 The [tipsy plugin](https://github.com/jaz303/tipsy) hasn't been updated since
@@ -70,3 +74,8 @@ This project uses icons made by
 
 [bfred-it](https://github.com/bfred-it) has contributed to improving the look
 and feel of the extension considerably.
+
+[izuzak](https://github.com/izuzak) from Github was instrumental in helping me
+with bug fixing and suggesting [compare API](https://developer.github.com/v3/repos/commits/#compare-two-commits) 
+for improving the heuristic to determine if a fork is more recent than the upstream
+repository.
