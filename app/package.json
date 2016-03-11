@@ -10,6 +10,7 @@
     "main": "lib/main.js",
     "engines": {
         "fennec": ">=38.0a1",
-        "firefox": ">=38.0a1"
+        "firefox": ">=38.0a1",
+        "seamonkey": ">=2.36"
     }
 }
