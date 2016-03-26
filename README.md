@@ -5,6 +5,8 @@
  - [Firefox addon](https://addons.mozilla.org/en-US/firefox/addon/lovely-forks/)
  - [SeaMonkey addon](https://addons.mozilla.org/en-US/seamonkey/addon/lovely-forks/)
  - [Chrome Web Store](https://chrome.google.com/webstore/detail/lovely-forks/ialbpcipalajnakfondkflpkagbkdoib)
+ 
+[![Chrome extension](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)](https://chrome.google.com/webstore/detail/lovely-forks/ialbpcipalajnakfondkflpkagbkdoib)
 
 An addon to help you notice **notable** forks of a Github project.
 
