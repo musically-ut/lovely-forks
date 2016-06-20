@@ -8,6 +8,9 @@
     "version": "2.6.0",
     "icon": "data/images/Heart_and_fork_inside_128.png",
     "main": "lib/main.js",
+    "permissions": {
+        "multiprocess": true
+    },
     "engines": {
         "fennec": ">=20.0",
         "firefox": ">=20.0",
