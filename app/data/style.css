@@ -1,5 +1,5 @@
 /* placeholder */
-.entry-title:after {
+.repohead-details-container .public:after {
     display: block;
     visibility: hidden;
 
@@ -9,7 +9,7 @@
 }
 
 /* remove placeholder */
-.has-lovely-forks.entry-title:after {
+.repohead-details-container .has-lovely-forks.public:after {
     display: none;
 }
 

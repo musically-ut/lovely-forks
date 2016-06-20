@@ -86,7 +86,7 @@ function getForksElement() {
 
     // If the layout of the page changes, we'll have to change this location.
     // We should make sure that we do not accidentally cause errors here.
-    var repoName = document.querySelector('.entry-title');
+    var repoName = document.querySelector('.repohead-details-container .public');
     if (repoName) {
         try {
             text = document.createElement('span');
