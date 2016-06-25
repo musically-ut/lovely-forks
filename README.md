@@ -24,7 +24,7 @@ notable fork (i.e. the fork with the most stars and at least one star), if such
 a fork exists.
 
 Also, if the fork is _more recent_ than the upstream, a flame icon is shown
-next to it. These are called called [_flamey forks_](https://github.com/musically-ut/lovely-forks/issues/13) 
+next to it. These are called [_flamey forks_](https://github.com/musically-ut/lovely-forks/issues/13) 
 as suggested by [Mottie](https://github.com/Mottie).
 
 ## Screenshots
