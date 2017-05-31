@@ -2,7 +2,7 @@
     "name": "lovely-forks",
     "id": "github-forks-addon@musicallyut.in",
     "title": "Lovely forks",
-    "description": "Show notable forks of Github projects.",
+    "description": "Show notable forks of GitHub projects.",
     "author": "Utkarsh Upadhyay",
     "license": "MPL 2.0",
     "version": "2.6.1",

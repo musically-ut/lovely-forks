@@ -91,7 +91,7 @@ function getForksElement() {
         try {
             text = document.createElement('span');
 
-            // Stealing the styling from Github fork-info
+            // Stealing the styling from GitHub fork-info
             text.classList.add('fork-flag', 'lovely-forks-addon');
 
             repoName.appendChild(text);
@@ -104,7 +104,7 @@ function getForksElement() {
         }
     } else {
         console.warn(_logName,
-                     'Looks like the layout of the Github page has changed.');
+                     'Looks like the layout of the GitHub page has changed.');
     }
 }
 
@@ -339,7 +339,7 @@ function onreadystatechangeFactory(xhr, successFn) {
                              'Looks like the rate-limit was exceeded.');
             } else {
                 console.warn(_logName,
-                             'Github API returned status:', xhr.status);
+                             'GitHub API returned status:', xhr.status);
             }
         } else {
             // Request is still in progress
@@ -434,7 +434,7 @@ function runFor(user, repo) {
         } else {
             if (DEBUG) {
                 console.log(_logName,
-                            'Requesting the data from Github API.');
+                            'Requesting the data from GitHub API.');
             }
             makeFreshRequest(user, repo);
         }

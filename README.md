@@ -8,9 +8,9 @@
  
 [![Chrome extension](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)](https://chrome.google.com/webstore/detail/lovely-forks/ialbpcipalajnakfondkflpkagbkdoib)
 
-An addon to help you notice **notable** forks of a Github project.
+An addon to help you notice **notable** forks of a GitHub project.
 
-Sometimes on Github, projects are abandoned by the original authors and the
+Sometimes on GitHub, projects are abandoned by the original authors and the
 development continues on a fork. However, the original repository is seldom
 updated to inform newcomers of that fact. I have often wasted effort on making
 a pull-request or installing old buggy versions of projects when the community
@@ -19,7 +19,7 @@ had already moved to a fork.
 To make matters worse, the old projects usually have higher search-engine
 traffic and a lot more stars than the forks. This makes the forks even harder
 to find. This addon tries to remedy that by adding a subscript under the name
-of the repository on the Github page of the project with a link to the most
+of the repository on the GitHub page of the project with a link to the most
 notable fork (i.e. the fork with the most stars and at least one star), if such
 a fork exists.
 
@@ -78,7 +78,7 @@ This project uses icons made by
 [bfred-it](https://github.com/bfred-it) has contributed to improving the look
 and feel of the extension considerably.
 
-[izuzak](https://github.com/izuzak) from Github was instrumental in helping me
+[izuzak](https://github.com/izuzak) from GitHub was instrumental in helping me
 with bug fixing and suggesting [compare API](https://developer.github.com/v3/repos/commits/#compare-two-commits) 
 for improving the heuristic to determine if a fork is more recent than the upstream
 repository.
