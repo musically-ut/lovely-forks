@@ -10,7 +10,7 @@ require('sdk/preferences/service').set('extensions.sdk.console.logLevel', 'debug
 var data = require('sdk/self').data;
 var { PageMod } = require('sdk/page-mod');
 
-// Work only on Github URLs
+// Work only on GitHub URLs
 var matchPatterns = [ '*.github.com' ];
 
 // Create a content script

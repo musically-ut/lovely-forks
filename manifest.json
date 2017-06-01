@@ -2,7 +2,7 @@
   "name": "Lovely forks",
   "version": "2.6.1",
   "manifest_version": 2,
-  "description": "Show notable forks of Github projects.",
+  "description": "Show notable forks of GitHub projects.",
   "homepage_url": "https://github.com/musically-ut/github-forks-addon",
   "icons": {
     "128": "app/data/images/Heart_and_fork_inside_128.png"
