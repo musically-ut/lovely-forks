@@ -5,6 +5,7 @@
  - [Firefox addon](https://addons.mozilla.org/en-US/firefox/addon/lovely-forks/)
  - [SeaMonkey addon](https://addons.mozilla.org/en-US/seamonkey/addon/lovely-forks/)
  - [Chrome Web Store](https://chrome.google.com/webstore/detail/lovely-forks/ialbpcipalajnakfondkflpkagbkdoib)
+ - [Opera via Chrome-extensions](https://addons.opera.com/en-gb/extensions/details/download-chrome-extension-9/?display=en)
  
 [![Chrome extension](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)](https://chrome.google.com/webstore/detail/lovely-forks/ialbpcipalajnakfondkflpkagbkdoib)
 
