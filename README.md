@@ -1,12 +1,19 @@
-![Lovely Forks Logo](http://musicallyut.in/docs/lovely-forks/logo.png)
-
-## Lovely forks
-
- - <a href="https://addons.mozilla.org/en-US/firefox/addon/lovely-forks/"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" width="24" /> Firefox addon</a>
- - <a href="https://addons.mozilla.org/en-US/seamonkey/addon/lovely-forks/"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/seamonkey/seamonkey_48x48.png" width="24" /> SeaMonkey addon</a>
- - <a href="https://chrome.google.com/webstore/detail/lovely-forks/ialbpcipalajnakfondkflpkagbkdoib"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" width="24" /> Chrome extension</a> 
+<table>
+<tr>
+<td>
+<img src="http://musicallyut.in/docs/lovely-forks/logo.png" alt="Lovely forks logo"><br/>
+<h2>Lovely forks</h2>
+</td>
+<td>
+<p><a href="https://addons.mozilla.org/en-US/firefox/addon/lovely-forks/"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" width="18" /> Firefox addon</a></p>
+<p><a href="https://addons.mozilla.org/en-US/seamonkey/addon/lovely-forks/"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/seamonkey/seamonkey_48x48.png" width="18" /> SeaMonkey addon</a></p>
+<p><a href="https://chrome.google.com/webstore/detail/lovely-forks/ialbpcipalajnakfondkflpkagbkdoib"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" width="18" /> Chrome extension</a>
+</p>
  
-Can also be installed on Opera through the <a href="https://addons.opera.com/en-gb/extensions/details/download-chrome-extension-9/?display=en"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" width="24" /> Opera Chrome-extension addon</a>.
+<p>Can also be installed on Opera through the <a href="https://addons.opera.com/en-gb/extensions/details/download-chrome-extension-9/?display=en"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" width="18" /> Opera Chrome-extension addon</a>.</p>
+</td>
+</tr>
+</table>
  
 ----
 
