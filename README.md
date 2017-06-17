@@ -1,13 +1,13 @@
 ![Lovely forks logo](http://musicallyut.in/docs/lovely-forks/logo.png)
 ## Lovely forks
 
-<p><a href="https://addons.mozilla.org/en-US/firefox/addon/lovely-forks/"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" width="18" /> Firefox addon</a></p>
-<p><a href="https://addons.mozilla.org/en-US/seamonkey/addon/lovely-forks/"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/seamonkey/seamonkey_48x48.png" width="18" /> SeaMonkey addon</a></p>
+<p><a href="https://addons.mozilla.org/firefox/addon/lovely-forks/"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" width="18" /> Firefox addon</a></p>
+<p><a href="https://addons.mozilla.org/seamonkey/addon/lovely-forks/"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/seamonkey/seamonkey_48x48.png" width="18" /> SeaMonkey addon</a></p>
 <p><a href="https://chrome.google.com/webstore/detail/lovely-forks/ialbpcipalajnakfondkflpkagbkdoib"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" width="18" /> Chrome extension</a>
 </p>
  
-<p>Can also be installed on Opera through the <a href="https://addons.opera.com/en-gb/extensions/details/download-chrome-extension-9/?display=en"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" width="18" /> Opera Chrome-extension addon</a>.</p>
- 
+<p>Can also be installed on Opera through the <a href="https://addons.opera.com/extensions/details/download-chrome-extension-9/"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" width="18" /> Opera Chrome-extension addon</a>.</p>
+
 ----
 
 An addon to help you notice **notable** forks of a GitHub project.
