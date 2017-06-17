@@ -13,10 +13,12 @@
     display: none;
 }
 
-/* smoother integration */
+/* smoother integration, show hierarchy */
 .lovely-forks-addon {
     animation: fade-in 0.2s;
+    padding-left: 1em;
 }
+
 @keyframes fade-in {
     from {
         opacity: 0;
