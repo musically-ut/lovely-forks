@@ -1,0 +1,26 @@
+/* placeholder */
+.repohead-details-container .public:after {
+    display: block;
+    visibility: hidden;
+
+    content: ".";
+    font-size: 12px;
+    line-height: 12px;
+}
+
+/* remove placeholder */
+.repohead-details-container .has-lovely-forks.public:after {
+    display: none;
+}
+
+/* smoother integration, show hierarchy */
+.lovely-forks-addon {
+    animation: fade-in 0.2s;
+    padding-left: 1em;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+}
