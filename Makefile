@@ -1,28 +1,28 @@
-.PHONY: all chrome firefox devel
+.PHONY: all chrome firefox devel readybuild
 
 VERSION=$(shell git describe --dirty)
-ARCHIVE_NAME=lovely-forks-${VERSION}.zip
+ARCHIVE_NAME=lovely-forks-${VERSION}
 PWD=$(shell pwd)
 ADDON_DIR="${PWD}/.tmp/app"
 
 all: firefox chrome
 
-chrome:
-	@echo "Exporting ${ARCHIVE_NAME}"
-	@git archive HEAD -o ${ARCHIVE_NAME}
+readybuild:
+	@echo "Preparing .tmp for building ..."
+	@rm -rf .tmp/
+	@mkdir -p .tmp/
+	@mkdir -p build/
+	@cp -r webext .tmp/
+	@cp LICENSE README.md .tmp/
 
-firefox: chrome
-	@rm -rf .tmp
-	@mkdir -p .tmp
-	@unzip -q ${ARCHIVE_NAME} -d .tmp
-	@jpm  --addon-dir=${ADDON_DIR} xpi
-	@cp ${ADDON_DIR}/*.xpi .
 
-devel:
-	@echo "Doing a development build."
-	@zip ${ARCHIVE_NAME} $(shell git ls-tree HEAD --full-name --name-only -r)
-	@rm -rf .tmp
-	@mkdir -p .tmp
-	@unzip -q ${ARCHIVE_NAME} -d .tmp
-	@jpm --addon-dir=${ADDON_DIR} xpi -v
-	@cp ${ADDON_DIR}/*.xpi .
+chrome: readybuild
+	@echo "Exporting build/${ARCHIVE_NAME}.chrome.zip"
+	@cat manifest.template.json | jq 'del(.applications)' > .tmp/manifest.json
+	@cd .tmp; zip ../build/${ARCHIVE_NAME}.chrome.zip **/*
+
+
+firefox: readybuild
+	@echo "Exporting Firefix build"
+	@cp manifest.template.json .tmp/manifest.json
+	@web-ext lint --source-dir=.tmp/ && web-ext build --source-dir=.tmp/ --overwrite-dest --artifacts-dir=build/

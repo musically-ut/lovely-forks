@@ -8,3 +8,4 @@ test/bower_components
 package
 *.xpi
 lovely-forks*.zip
+build/

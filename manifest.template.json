@@ -1,16 +1,15 @@
 {
-  "manifest_version": 2,
   "name": "Lovely forks",
-  "version": "2.7.0",
-  "short_name": "lovely-forks",
+  "version": "3.0.0",
+  "manifest_version": 2,
   "description": "Show notable forks of GitHub projects.",
   "homepage_url": "https://github.com/musically-ut/lovely-forks",
   "icons": {
-    "128": "icons/Heart_and_fork_inside_128.png"
+    "128": "webext/icons/Heart_and_fork_inside_128.png"
   },
   "permissions": [
     "*://github.com/*",
-    "*://*.github.com/*"
+    "*://api.github.com/*"
   ],
   "content_scripts": [
     {
@@ -18,10 +17,16 @@
         "*://github.com/*"
       ],
       "css": [
-        "data/style.css"
+        "webext/data/style.css"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "*://github.com/*"
       ],
       "js": [
-        "data/contentscript.js"
+        "webext/data/contentscript.js"
       ],
       "run_at": "document_end",
       "all_frames": true

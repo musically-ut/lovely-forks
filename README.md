@@ -84,3 +84,5 @@ and feel of the extension considerably.
 with bug fixing and suggesting [compare API](https://developer.github.com/v3/repos/commits/#compare-two-commits) 
 for improving the heuristic to determine if a fork is more recent than the upstream
 repository.
+
+[yfdyh000](https://github.com/yfdyh000) added a [userscript version](https://greasyfork.org/en/scripts/31469-lovely-forks) and made the switch from Firefox Addon SDK to Web-extensions.
