@@ -19,7 +19,7 @@ readybuild:
 chrome: readybuild
 	@echo "Exporting build/${ARCHIVE_NAME}.chrome.zip"
 	@cat manifest.template.json | jq 'del(.applications)' > .tmp/manifest.json
-	@cd .tmp; zip ../build/${ARCHIVE_NAME}.chrome.zip **/*
+	@cd .tmp; zip ../build/${ARCHIVE_NAME}.chrome.zip * **/*
 
 
 firefox: readybuild
