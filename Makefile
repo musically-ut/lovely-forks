@@ -2,10 +2,7 @@
 
 VERSION=$(shell git describe --dirty)
 ARCHIVE_NAME=lovely-forks-${VERSION}
-PWD=$(shell pwd)
-ADDON_DIR="${PWD}/.tmp/app"
 
-all: firefox chrome
 
 readybuild:
 	@echo "Preparing .tmp for building ..."
@@ -19,10 +16,13 @@ readybuild:
 chrome: readybuild
 	@echo "Exporting build/${ARCHIVE_NAME}.chrome.zip"
 	@cat manifest.template.json | jq 'del(.applications)' > .tmp/manifest.json
-	@cd .tmp; zip ../build/${ARCHIVE_NAME}.chrome.zip * **/*
+	@cd .tmp; zip -r ../build/${ARCHIVE_NAME}.chrome.zip .
 
 
 firefox: readybuild
-	@echo "Exporting Firefix build"
+	@echo "Exporting Firefox build"
 	@cp manifest.template.json .tmp/manifest.json
 	@web-ext lint --source-dir=.tmp/ && web-ext build --source-dir=.tmp/ --overwrite-dest --artifacts-dir=build/
+
+
+all: firefox chrome
