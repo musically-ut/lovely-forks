@@ -16,7 +16,6 @@
 /* smoother integration, show hierarchy */
 .lovely-forks-addon {
     animation: fade-in 0.2s;
-    padding-left: 1em;
 }
 
 @keyframes fade-in {
