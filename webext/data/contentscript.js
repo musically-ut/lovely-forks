@@ -104,8 +104,6 @@ function getForksElement() {
 }
 
 function clearLocalStorage() {
-    const keysToUnset = [];
-
     /* Remove all items which have expired. */
     for(let ii = 0; ii < localStorage.length; ii++) {
         const key = localStorage.key(ii);
@@ -115,9 +113,9 @@ function clearLocalStorage() {
 
             if (timeMs) {
                 if (isExpired(timeMs)) {
-                    keysToUnset.push(makeRemoteDataKey(user, repo));
-                    keysToUnset.push(makeSelfDataKey(user, repo));
-                    keysToUnset.push(makeTimeKey(user, repo));
+                    removeFromLocalStorage(makeRemoteDataKey(user, repo));
+                    removeFromLocalStorage(makeSelfDataKey(user, repo));
+                    removeFromLocalStorage(makeTimeKey(user, repo));
                 }
             } else {
                 console.warn(_logName,
@@ -126,14 +124,14 @@ function clearLocalStorage() {
             }
         }
     }
+}
 
-    keysToUnset.forEach(key => {
-        if (DEBUG) {
-            console.log(_logName,
-                        'Removing key: ', key);
-        }
-        localStorage.removeItem(key);
-    });
+function removeFromLocalStorage(key) {
+    if (DEBUG) {
+        console.log(_logName,
+                    'Removing key: ', key);
+    }
+    localStorage.removeItem(key);
 }
 
 function safeUpdateDOM(action, actionName) {
