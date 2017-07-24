@@ -156,19 +156,17 @@ function safeUpdateDOM(action, actionName) {
 }
 
 function showDetails(fullName, url, numStars, remoteIsNewer) {
-    return text => {
-        const forkA = document.createElement('a');
-        forkA.href = url;
-        forkA.append(fullName);
+    const forkA = document.createElement('a');
+    forkA.href = url;
+    forkA.append(fullName);
 
-        text.append('also forked to ', forkA, ' ', createIconSVG('star'), `${numStars} `);
+    text.append('also forked to ', forkA, ' ', createIconSVG('star'), `${numStars} `);
 
-        if (remoteIsNewer) {
-            text.append(createIconSVG('flame'));
-        }
+    if (remoteIsNewer) {
+        text.append(createIconSVG('flame'));
+    }
 
-        text.parentNode.classList.add('has-lovely-forks');
-    };
+    text.parentNode.classList.add('has-lovely-forks');
 }
 
 function makeRemoteDataURL(user, repo) {
@@ -302,7 +300,7 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
             return;
         }
 
-        safeUpdateDOM(showDetails(fullName, forkUrl, starGazers,
+        safeUpdateDOM(() => showDetails(fullName, forkUrl, starGazers,
                                   remoteIsNewer),
                       'showing details');
     } catch (e) {
