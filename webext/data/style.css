@@ -24,3 +24,8 @@
         opacity: 0;
     }
 }
+
+/* icons */
+.lovely-forks-addon img {
+    vertical-align: bottom;
+}
