@@ -310,69 +310,44 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
     }
 }
 
-function onreadystatechangeFactory(xhr, successFn) {
-    return () => {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                successFn();
-            } else if (xhr.status === 403) {
-                console.warn(_logName,
-                             'Looks like the rate-limit was exceeded.');
-            } else {
-                console.warn(_logName,
-                             'GitHub API returned status:', xhr.status);
-            }
-        } else {
-            // Request is still in progress
-            // Do nothing.
+async function makeFreshRequest(user, repo) {
+    const response = await fetch(makeRemoteDataURL(user, repo));
+
+    if (response.status === 403) {
+        return console.warn(_logName,
+                     'Looks like the rate-limit was exceeded.');
+    }
+
+    if (!response.ok) {
+        return console.warn(_logName,
+                     'GitHub API returned status:', response.status);
+    }
+
+    const [mostStarredFork] = await response.json();
+
+    if (!mostStarredFork) {
+        if (DEBUG) {
+            console.log(_logName,
+                        'Repository does not have any forks.');
         }
-    };
-}
+        return;
+    }
 
-function makeFreshRequest(user, repo) {
-    const xhrFork = new XMLHttpRequest();
+    const forksDataStr = JSON.stringify([mostStarredFork]);
+    const defaultBranch = mostStarredFork['default_branch'];
+    const remoteUser    = mostStarredFork['owner']['login'];
 
-    xhrFork.onreadystatechange = onreadystatechangeFactory(
-        xhrFork,
-        () => {
-            const forksDataJson = JSON.parse(xhrFork.responseText);
-            if (!forksDataJson || forksDataJson.length === 0) {
-                if (DEBUG) {
-                    console.log(_logName,
-                                'Repository does not have any forks.');
-                }
-                return;
-            }
+    const response2 = await fetch(makeCommitDiffURL(user, repo, remoteUser, defaultBranch));
 
-            const mostStarredFork = forksDataJson[0];
-            const forksDataStr = JSON.stringify([mostStarredFork]);
-            const defaultBranch = mostStarredFork['default_branch'];
-            const remoteUser    = mostStarredFork['owner']['login'];
+    let commitDiffStr = null;
+    if (response2.ok) {
+        const commitDiffJson = await response2.json();
+        // Dropping the list of commits to conserve space.
+        delete commitDiffJson.commits;
+        commitDiffStr = JSON.stringify(commitDiffJson);
+    }
 
-            const xhrDiff = new XMLHttpRequest();
-
-            xhrDiff.onreadystatechange = () => {
-                if (xhrDiff.readyState === 4) {
-                    if (xhrDiff.status === 200) {
-                        const commitDiffJson = JSON.parse(xhrDiff.responseText);
-                        // Dropping the list of commits to conserve space.
-                        commitDiffJson['commits'] = [];
-                        const commitDiffStr = JSON.stringify(commitDiffJson);
-                        processWithData(user, repo, forksDataStr, commitDiffStr, true);
-                    } else {
-                        // In case of any error, ignore recency data.
-                        processWithData(user, repo, forksDataStr, null, true);
-                    }
-                }
-            };
-
-            xhrDiff.open('GET', makeCommitDiffURL(user, repo, remoteUser, defaultBranch));
-            xhrDiff.send();
-        }
-    );
-
-    xhrFork.open('GET', makeRemoteDataURL(user, repo));
-    xhrFork.send();
+    processWithData(user, repo, forksDataStr, commitDiffStr, true);
 }
 
 function getDataFor(user, repo) {
