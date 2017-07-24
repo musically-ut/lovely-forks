@@ -62,7 +62,7 @@ function makeRemoteDataKey(user, repo) {
 }
 
 
-const reDateKey = new RegExp('^lovely-forks@date:(.*)/(.*)$');
+const reDateKey = /^lovely-forks@date:(.*)[/](.*)$/;
 function makeTimeKey(user, repo) {
     return `lovely-forks@date:${user}/${repo}`;
 }
