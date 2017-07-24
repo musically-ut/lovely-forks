@@ -1,16 +1,6 @@
 /* placeholder */
-.repohead-details-container .public:after {
-    display: block;
-    visibility: hidden;
-
-    content: ".";
-    font-size: 12px;
-    line-height: 12px;
-}
-
-/* remove placeholder */
-.repohead-details-container .has-lovely-forks.public:after {
-    display: none;
+.repohead-details-container .public:not(.has-lovely-forks) {
+    padding-bottom: 12px;
 }
 
 /* smoother integration, show hierarchy */
