@@ -68,12 +68,8 @@ function makeTimeKey(user, repo) {
 }
 
 function parseTimeKey(key) {
-    const match = reDateKey.exec(key);
-    if (match !== null) {
-        return [match[1], match[2]];
-    } else {
-        return null;
-    }
+    const [, user, repo] = reDateKey.exec(key) || [];
+    return {user, repo};
 }
 
 function getForksElement() {
@@ -113,15 +109,12 @@ function clearLocalStorage() {
     /* Remove all items which have expired. */
     for(let ii = 0; ii < localStorage.length; ii++) {
         const key = localStorage.key(ii);
-        const mbUserRepo = parseTimeKey(key);
-        if (mbUserRepo !== null) {
-
+        const {user, repo} = parseTimeKey(key);
+        if (user && repo) {
             const timeMs = mbStrToMs(localStorage.getItem(key));
 
             if (timeMs) {
                 if (isExpired(timeMs)) {
-                    const user = mbUserRepo[0];
-                    const repo = mbUserRepo[1];
                     keysToUnset.push(makeRemoteDataKey(user, repo));
                     keysToUnset.push(makeSelfDataKey(user, repo));
                     keysToUnset.push(makeTimeKey(user, repo));
@@ -437,10 +430,8 @@ function runFor(user, repo) {
 
 /* Script execution */
 
-const pathComponents = window.location.pathname.split('/');
-if (pathComponents.length >= 3) {
-    const user = pathComponents[1];
-    const repo = pathComponents[2];
+const [, user, repo] = window.location.pathname.split('/');
+if (user && repo) {
     runFor(user, repo);
 } else {
     if (DEBUG) {
