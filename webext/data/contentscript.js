@@ -1,25 +1,24 @@
-'use strict';
 /*jshint browser: true, es5: true, sub:true */
 
-var _logName = 'lovely-forks:';
-var DEBUG = false;
-var text;
+const _logName = 'lovely-forks:';
+const DEBUG = false;
+let text;
 
-var svgNS = 'http://www.w3.org/2000/svg';
+const svgNS = 'http://www.w3.org/2000/svg';
 
 function createIconSVG(type) {
-    var svg = document.createElementNS(svgNS, 'svg');
+    const svg = document.createElementNS(svgNS, 'svg');
     svg.setAttributeNS(null, 'height', 12);
     svg.setAttributeNS(null, 'width', 10.5);
     svg.setAttributeNS(null, 'viewBox', '0 0 14 16');
     svg.style['vertical-align'] = 'bottom';
     svg.style['fill'] = 'currentColor';
 
-    svg.classList.add('opticon', 'opticon-' + type);
+    svg.classList.add('opticon', `opticon-${type}`);
 
-    var title = document.createElementNS(svgNS, 'title');
+    const title = document.createElementNS(svgNS, 'title');
 
-    var iconPath = document.createElementNS(svgNS, 'path');
+    const iconPath = document.createElementNS(svgNS, 'path');
     switch(type) {
         case 'star':
             title.appendChild(document.createTextNode('Number of stars'));
@@ -47,29 +46,29 @@ function mbStrToMs(dateStr) {
 }
 
 function isExpired(timeMs) {
-    var currentTime = new Date();
+    const currentTime = new Date();
 
     // The time of expiry of data is set to be an hour ago
-    var expiryTimeMs = currentTime.valueOf() - 1000 * 60 * 60;
+    const expiryTimeMs = currentTime.valueOf() - 1000 * 60 * 60;
     return timeMs < expiryTimeMs;
 }
 
 function makeSelfDataKey(user, repo) {
-    return 'lovely-forks@self:' + user + '/' + repo;
+    return `lovely-forks@self:${user}/${repo}`;
 }
 
 function makeRemoteDataKey(user, repo) {
-    return 'lovely-forks@remote:' + user + '/' + repo;
+    return `lovely-forks@remote:${user}/${repo}`;
 }
 
 
-var reDateKey = new RegExp('^lovely-forks@date:(.*)/(.*)$');
+const reDateKey = new RegExp('^lovely-forks@date:(.*)/(.*)$');
 function makeTimeKey(user, repo) {
-    return 'lovely-forks@date:' + user + '/' + repo;
+    return `lovely-forks@date:${user}/${repo}`;
 }
 
 function parseTimeKey(key) {
-    var match = reDateKey.exec(key);
+    const match = reDateKey.exec(key);
     if (match !== null) {
         return [match[1], match[2]];
     } else {
@@ -86,7 +85,7 @@ function getForksElement() {
 
     // If the layout of the page changes, we'll have to change this location.
     // We should make sure that we do not accidentally cause errors here.
-    var repoName = document.querySelector('.repohead-details-container .public');
+    const repoName = document.querySelector('.repohead-details-container .public');
     if (repoName) {
         try {
             text = document.createElement('span');
@@ -109,20 +108,20 @@ function getForksElement() {
 }
 
 function clearLocalStorage() {
-    var keysToUnset = [];
+    const keysToUnset = [];
 
     /* Remove all items which have expired. */
-    for(var ii = 0; ii < localStorage.length; ii++) {
-        var key = localStorage.key(ii);
-        var mbUserRepo = parseTimeKey(key);
+    for(let ii = 0; ii < localStorage.length; ii++) {
+        const key = localStorage.key(ii);
+        const mbUserRepo = parseTimeKey(key);
         if (mbUserRepo !== null) {
 
-            var timeMs = mbStrToMs(localStorage.getItem(key));
+            const timeMs = mbStrToMs(localStorage.getItem(key));
 
             if (timeMs) {
                 if (isExpired(timeMs)) {
-                    var user = mbUserRepo[0],
-                        repo = mbUserRepo[1];
+                    const user = mbUserRepo[0];
+                    const repo = mbUserRepo[1];
                     keysToUnset.push(makeRemoteDataKey(user, repo));
                     keysToUnset.push(makeSelfDataKey(user, repo));
                     keysToUnset.push(makeTimeKey(user, repo));
@@ -135,7 +134,7 @@ function clearLocalStorage() {
         }
     }
 
-    keysToUnset.forEach(function (key) {
+    keysToUnset.forEach(key => {
         if (DEBUG) {
             console.log(_logName,
                         'Removing key: ', key);
@@ -146,7 +145,7 @@ function clearLocalStorage() {
 
 function safeUpdateDOM(action, actionName) {
     // Get the stored version or create it if it doesn't exist
-    var text = getForksElement();
+    const text = getForksElement();
 
     // We should make sure that we do not accidentally cause errors here.
     if (text) {
@@ -166,8 +165,8 @@ function safeUpdateDOM(action, actionName) {
 }
 
 function showDetails(fullName, url, numStars, remoteIsNewer) {
-    return function (text) {
-        var forkA = document.createElement('a');
+    return text => {
+        const forkA = document.createElement('a');
         forkA.href = url;
         forkA.appendChild(document.createTextNode(fullName));
 
@@ -175,7 +174,7 @@ function showDetails(fullName, url, numStars, remoteIsNewer) {
         text.appendChild(forkA);
         text.appendChild(document.createTextNode(' '));
         text.appendChild(createIconSVG('star'));
-        text.appendChild(document.createTextNode('' + numStars + ' '));
+        text.appendChild(document.createTextNode(`${numStars} `));
 
         if (remoteIsNewer) {
             text.appendChild(createIconSVG('flame'));
@@ -186,21 +185,17 @@ function showDetails(fullName, url, numStars, remoteIsNewer) {
 }
 
 function makeRemoteDataURL(user, repo) {
-    return 'https://api.github.com/repos/' +
-                  user + '/' + repo + '/forks?sort=stargazers';
+    return `https://api.github.com/repos/${user}/${repo}/forks?sort=stargazers`;
 }
 
 function makeCommitDiffURL(user, repo, remoteUser, default_branch) {
-    return 'https://api.github.com/repos/' +
-                  user + '/' + repo + '/compare/' +
-                  user + ':' + default_branch + '...' +
-                  remoteUser + ':' + default_branch;
+    return `https://api.github.com/repos/${user}/${repo}/compare/${user}:${default_branch}...${remoteUser}:${default_branch}`;
 }
 
 
 // From: http://crocodillon.com/blog/always-catch-localstorage-security-and-quota-exceeded-errors
 function isQuotaExceeded(e) {
-    var quotaExceeded = false;
+    let quotaExceeded = false;
     if (e) {
         if (e.code) {
             switch (e.code) {
@@ -224,30 +219,31 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
         /* Parse fork data */
         /* Can either be just one data element,
          * or could be the list of all forks. */
-        var allForksData = JSON.parse(remoteDataStr);
-        var mostStarredFork = allForksData[0];
+        const allForksData = JSON.parse(remoteDataStr);
+        const mostStarredFork = allForksData[0];
 
-        var forkUrl = mostStarredFork['html_url'],
-            fullName = mostStarredFork['full_name'];
+        const forkUrl = mostStarredFork['html_url'];
+        const fullName = mostStarredFork['full_name'];
 
         /* Parse self data */
         /* This could either be the commit-diff data (v2)
          * or `all_commits` data (v1). */
         /* selfData can also be null, if the commit difference API resulted in
          * an error. */
-        var selfData = JSON.parse(selfDataStr),
-            selfDataToSave = selfData,
-            remoteIsNewer = false;
+        const selfData = JSON.parse(selfDataStr);
+
+        let selfDataToSave = selfData;
+        let remoteIsNewer = false;
 
         if (selfData !== null) {
             if (selfData.hasOwnProperty('ahead_by')) {
                 // New version
-                var diffData = selfData;
+                const diffData = selfData;
                 remoteIsNewer = (diffData['ahead_by'] - diffData['behind_by']) > 0;
             } else {
                 // Old version
-                var allCommits = selfData;
-                var remoteUpdateTimeMs = mbStrToMs(mostStarredFork['pushed_at']);
+                const allCommits = selfData;
+                const remoteUpdateTimeMs = mbStrToMs(mostStarredFork['pushed_at']);
 
                 if (!allCommits || allCommits.length < 1) {
                     if (DEBUG) {
@@ -257,8 +253,8 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
                     return;
                 }
 
-                var latestCommit = allCommits[0]['commit'];
-                var committer = latestCommit['committer'];
+                const latestCommit = allCommits[0]['commit'];
+                const committer = latestCommit['committer'];
 
                 if (!committer) {
                     if (DEBUG) {
@@ -268,7 +264,7 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
                     return;
                 }
 
-                var selfUpdateTimeMs = mbStrToMs(committer['date']);
+                const selfUpdateTimeMs = mbStrToMs(committer['date']);
 
                 remoteIsNewer = remoteUpdateTimeMs > selfUpdateTimeMs;
                 selfDataToSave = [allCommits[0]];
@@ -279,7 +275,7 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
 
         /* Cache data, if necessary */
         if (isFreshData) {
-            var currentTimeMs = (new Date()).toString();
+            const currentTimeMs = (new Date()).toString();
 
             if (DEBUG) {
                 console.log(_logName, 'Saving data');
@@ -290,12 +286,12 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
                 localStorage.setItem(makeTimeKey(user, repo), currentTimeMs);
 
                 // Only the most starred fork is relevant
-                var relevantRemoteDataStr = JSON.stringify([mostStarredFork]);
+                const relevantRemoteDataStr = JSON.stringify([mostStarredFork]);
                 localStorage.setItem(makeRemoteDataKey(user, repo),
                                      relevantRemoteDataStr);
 
                 // Only the latest commit is relevant
-                var relevantSelfDataStr = JSON.stringify(selfDataToSave);
+                const relevantSelfDataStr = JSON.stringify(selfDataToSave);
                 localStorage.setItem(makeSelfDataKey(user, repo),
                                      relevantSelfDataStr);
             } catch(e) {
@@ -309,7 +305,7 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
 
         // Now if the repository doesn't have any notable forks, so not
         // touch the DOM.
-        var starGazers = mostStarredFork['stargazers_count'];
+        const starGazers = mostStarredFork['stargazers_count'];
 
         if (!starGazers) {
             if (DEBUG) {
@@ -330,7 +326,7 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
 }
 
 function onreadystatechangeFactory(xhr, successFn) {
-    return function () {
+    return () => {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 successFn();
@@ -349,12 +345,12 @@ function onreadystatechangeFactory(xhr, successFn) {
 }
 
 function makeFreshRequest(user, repo) {
-    var xhrFork = new XMLHttpRequest();
+    const xhrFork = new XMLHttpRequest();
 
     xhrFork.onreadystatechange = onreadystatechangeFactory(
         xhrFork,
-        function () {
-            var forksDataJson = JSON.parse(xhrFork.responseText);
+        () => {
+            const forksDataJson = JSON.parse(xhrFork.responseText);
             if (!forksDataJson || forksDataJson.length === 0) {
                 if (DEBUG) {
                     console.log(_logName,
@@ -363,21 +359,20 @@ function makeFreshRequest(user, repo) {
                 return;
             }
 
-            var mostStarredFork = forksDataJson[0],
-                forksDataStr = JSON.stringify([mostStarredFork]);
+            const mostStarredFork = forksDataJson[0];
+            const forksDataStr = JSON.stringify([mostStarredFork]);
+            const defaultBranch = mostStarredFork['default_branch'];
+            const remoteUser    = mostStarredFork['owner']['login'];
 
-            var defaultBranch = mostStarredFork['default_branch'],
-                remoteUser    = mostStarredFork['owner']['login'];
+            const xhrDiff = new XMLHttpRequest();
 
-            var xhrDiff = new XMLHttpRequest();
-
-            xhrDiff.onreadystatechange = function () {
+            xhrDiff.onreadystatechange = () => {
                 if (xhrDiff.readyState === 4) {
                     if (xhrDiff.status === 200) {
-                        var commitDiffJson = JSON.parse(xhrDiff.responseText);
+                        const commitDiffJson = JSON.parse(xhrDiff.responseText);
                         // Dropping the list of commits to conserve space.
                         commitDiffJson['commits'] = [];
-                        var commitDiffStr = JSON.stringify(commitDiffJson);
+                        const commitDiffStr = JSON.stringify(commitDiffJson);
                         processWithData(user, repo, forksDataStr, commitDiffStr, true);
                     } else {
                         // In case of any error, ignore recency data.
@@ -396,15 +391,15 @@ function makeFreshRequest(user, repo) {
 }
 
 function getDataFor(user, repo) {
-    var lfTimeKey       = makeTimeKey(user, repo),
-        lfRemoteDataKey = makeRemoteDataKey(user, repo),
-        lfSelfDataKey   = makeSelfDataKey(user, repo);
+    const lfTimeKey       = makeTimeKey(user, repo);
+    const lfRemoteDataKey = makeRemoteDataKey(user, repo);
+    const lfSelfDataKey   = makeSelfDataKey(user, repo);
 
-    var ret = { hasData: false };
+    const ret = { hasData: false };
 
-    var savedRemoteDataStr = localStorage.getItem(lfRemoteDataKey);
-    var savedSelfDataStr   = localStorage.getItem(lfSelfDataKey);
-    var saveTimeMs         = mbStrToMs(localStorage.getItem(lfTimeKey));
+    const savedRemoteDataStr = localStorage.getItem(lfRemoteDataKey);
+    const savedSelfDataStr   = localStorage.getItem(lfSelfDataKey);
+    const saveTimeMs         = mbStrToMs(localStorage.getItem(lfTimeKey));
 
     if (saveTimeMs         === null ||
         savedRemoteDataStr === null ||
@@ -422,7 +417,7 @@ function getDataFor(user, repo) {
 
 function runFor(user, repo) {
     try {
-        var cache = getDataFor(user, repo);
+        const cache = getDataFor(user, repo);
         if (cache.hasData && !isExpired(cache.saveTimeMs)) {
             if (DEBUG) {
                 console.log(_logName,
@@ -439,16 +434,17 @@ function runFor(user, repo) {
             makeFreshRequest(user, repo);
         }
     } catch (e) {
-        console.error(_logName, 'Could not run for ', user + '/' + repo,
+        console.error(_logName, 'Could not run for ', `${user}/${repo}`,
                       'Exception: ', e);
     }
 }
 
 /* Script execution */
 
-var pathComponents = window.location.pathname.split('/');
+const pathComponents = window.location.pathname.split('/');
 if (pathComponents.length >= 3) {
-    var user = pathComponents[1], repo = pathComponents[2];
+    const user = pathComponents[1];
+    const repo = pathComponents[2];
     runFor(user, repo);
 } else {
     if (DEBUG) {
