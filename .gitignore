@@ -9,3 +9,4 @@ package
 *.xpi
 lovely-forks*.zip
 build/
+manifest.json

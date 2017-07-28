@@ -25,4 +25,8 @@ firefox: readybuild
 	@web-ext lint --source-dir=.tmp/ && web-ext build --source-dir=.tmp/ --overwrite-dest --artifacts-dir=build/
 
 
+manifest:
+	@cat manifest.template.json | jq 'del(.applications)' > manifest.json
+
+
 all: firefox chrome
