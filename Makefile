@@ -9,7 +9,7 @@ readybuild:
 	@rm -rf .tmp/
 	@mkdir -p .tmp/
 	@mkdir -p build/
-	@cp -r webext .tmp/
+	@rsync -av webext .tmp/ --exclude="*.orig" --exclude="*~" --exclude="*.sw?"
 	@cp LICENSE README.md .tmp/
 
 
