@@ -7,6 +7,10 @@
   "icons": {
     "128": "webext/icons/Heart_and_fork_inside_128.png"
   },
+  "web_accessible_resources": [
+    "webext/icons/star.svg",
+    "webext/icons/flame.svg"
+  ],
   "permissions": [
     "*://github.com/*",
     "*://api.github.com/*"

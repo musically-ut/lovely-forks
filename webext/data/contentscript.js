@@ -1,41 +1,20 @@
-'use strict';
 /*jshint browser: true, es5: true, sub:true */
 
-var _logName = 'lovely-forks:';
-var DEBUG = false;
-var text;
-
-var svgNS = 'http://www.w3.org/2000/svg';
+const _logName = 'lovely-forks:';
+const DEBUG = false;
+let text;
 
 function createIconSVG(type) {
-    var svg = document.createElementNS(svgNS, 'svg');
-    svg.setAttributeNS(null, 'height', 12);
-    svg.setAttributeNS(null, 'width', 10.5);
-    svg.setAttributeNS(null, 'viewBox', '0 0 14 16');
-    svg.style['vertical-align'] = 'bottom';
-    svg.style['fill'] = 'currentColor';
-
-    svg.classList.add('opticon', 'opticon-' + type);
-
-    var title = document.createElementNS(svgNS, 'title');
-
-    var iconPath = document.createElementNS(svgNS, 'path');
-    switch(type) {
-        case 'star':
-            title.appendChild(document.createTextNode('Number of stars'));
-            iconPath.setAttributeNS(null, 'd', 'M14 6l-4.9-0.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14l4.33-2.33 4.33 2.33L10.4 9.26 14 6z');
-            break;
-        case 'flame':
-            title.appendChild(document.createTextNode('Fork may be more recent than upstream.'));
-            iconPath.setAttributeNS(null, 'd',  'M5.05 0.31c0.81 2.17 0.41 3.38-0.52 4.31-0.98 1.05-2.55 1.83-3.63 3.36-1.45 2.05-1.7 6.53 3.53 7.7-2.2-1.16-2.67-4.52-0.3-6.61-0.61 2.03 0.53 3.33 1.94 2.86 1.39-0.47 2.3 0.53 2.27 1.67-0.02 0.78-0.31 1.44-1.13 1.81 3.42-0.59 4.78-3.42 4.78-5.56 0-2.84-2.53-3.22-1.25-5.61-1.52 0.13-2.03 1.13-1.89 2.75 0.09 1.08-1.02 1.8-1.86 1.33-0.67-0.41-0.66-1.19-0.06-1.78 1.25-1.23 1.75-4.09-1.88-6.22l-0.02-0.02z');
-            iconPath.setAttributeNS(null, 'fill', '#d26911');
-            break;
+    const icon = document.createElement('img');
+    if (type === 'star') {
+        icon.title = 'Number of stars';
+    } else if (type === 'flame') {
+        icon.title = 'Fork may be more recent than upstream.';
+    } else {
+        return icon;
     }
-
-    iconPath.appendChild(title);
-    svg.appendChild(iconPath);
-
-    return svg;
+    icon.src = chrome.extension.getURL(`webext/icons/${type}.svg`);
+    return icon;
 }
 
 function emptyElem(elem) {
@@ -47,34 +26,30 @@ function mbStrToMs(dateStr) {
 }
 
 function isExpired(timeMs) {
-    var currentTime = new Date();
+    const currentTime = new Date();
 
     // The time of expiry of data is set to be an hour ago
-    var expiryTimeMs = currentTime.valueOf() - 1000 * 60 * 60;
+    const expiryTimeMs = currentTime.valueOf() - 1000 * 60 * 60;
     return timeMs < expiryTimeMs;
 }
 
 function makeSelfDataKey(user, repo) {
-    return 'lovely-forks@self:' + user + '/' + repo;
+    return `lovely-forks@self:${user}/${repo}`;
 }
 
 function makeRemoteDataKey(user, repo) {
-    return 'lovely-forks@remote:' + user + '/' + repo;
+    return `lovely-forks@remote:${user}/${repo}`;
 }
 
 
-var reDateKey = new RegExp('^lovely-forks@date:(.*)/(.*)$');
+const reDateKey = /^lovely-forks@date:(.*)[/](.*)$/;
 function makeTimeKey(user, repo) {
-    return 'lovely-forks@date:' + user + '/' + repo;
+    return `lovely-forks@date:${user}/${repo}`;
 }
 
 function parseTimeKey(key) {
-    var match = reDateKey.exec(key);
-    if (match !== null) {
-        return [match[1], match[2]];
-    } else {
-        return null;
-    }
+    const [, user, repo] = reDateKey.exec(key) || [];
+    return {user, repo};
 }
 
 function getForksElement() {
@@ -86,7 +61,7 @@ function getForksElement() {
 
     // If the layout of the page changes, we'll have to change this location.
     // We should make sure that we do not accidentally cause errors here.
-    var repoName = document.querySelector('.repohead-details-container .public');
+    const repoName = document.querySelector('.repohead-details-container .public');
     if (repoName) {
         try {
             text = document.createElement('span');
@@ -94,7 +69,7 @@ function getForksElement() {
             // Stealing the styling from GitHub fork-info
             text.classList.add('fork-flag', 'lovely-forks-addon');
 
-            repoName.appendChild(text);
+            repoName.append(text);
 
             return text;
         } catch (e) {
@@ -109,23 +84,18 @@ function getForksElement() {
 }
 
 function clearLocalStorage() {
-    var keysToUnset = [];
-
     /* Remove all items which have expired. */
-    for(var ii = 0; ii < localStorage.length; ii++) {
-        var key = localStorage.key(ii);
-        var mbUserRepo = parseTimeKey(key);
-        if (mbUserRepo !== null) {
-
-            var timeMs = mbStrToMs(localStorage.getItem(key));
+    for(let ii = 0; ii < localStorage.length; ii++) {
+        const key = localStorage.key(ii);
+        const {user, repo} = parseTimeKey(key);
+        if (user && repo) {
+            const timeMs = mbStrToMs(localStorage.getItem(key));
 
             if (timeMs) {
                 if (isExpired(timeMs)) {
-                    var user = mbUserRepo[0],
-                        repo = mbUserRepo[1];
-                    keysToUnset.push(makeRemoteDataKey(user, repo));
-                    keysToUnset.push(makeSelfDataKey(user, repo));
-                    keysToUnset.push(makeTimeKey(user, repo));
+                    removeFromLocalStorage(makeRemoteDataKey(user, repo));
+                    removeFromLocalStorage(makeSelfDataKey(user, repo));
+                    removeFromLocalStorage(makeTimeKey(user, repo));
                 }
             } else {
                 console.warn(_logName,
@@ -134,19 +104,19 @@ function clearLocalStorage() {
             }
         }
     }
+}
 
-    keysToUnset.forEach(function (key) {
-        if (DEBUG) {
-            console.log(_logName,
-                        'Removing key: ', key);
-        }
-        localStorage.removeItem(key);
-    });
+function removeFromLocalStorage(key) {
+    if (DEBUG) {
+        console.log(_logName,
+                    'Removing key: ', key);
+    }
+    localStorage.removeItem(key);
 }
 
 function safeUpdateDOM(action, actionName) {
     // Get the stored version or create it if it doesn't exist
-    var text = getForksElement();
+    const text = getForksElement();
 
     // We should make sure that we do not accidentally cause errors here.
     if (text) {
@@ -166,41 +136,31 @@ function safeUpdateDOM(action, actionName) {
 }
 
 function showDetails(fullName, url, numStars, remoteIsNewer) {
-    return function (text) {
-        var forkA = document.createElement('a');
-        forkA.href = url;
-        forkA.appendChild(document.createTextNode(fullName));
+    const forkA = document.createElement('a');
+    forkA.href = url;
+    forkA.append(fullName);
 
-        text.appendChild(document.createTextNode('also forked to '));
-        text.appendChild(forkA);
-        text.appendChild(document.createTextNode(' '));
-        text.appendChild(createIconSVG('star'));
-        text.appendChild(document.createTextNode('' + numStars + ' '));
+    text.append('also forked to ', forkA, ' ', createIconSVG('star'), `${numStars} `);
 
-        if (remoteIsNewer) {
-            text.appendChild(createIconSVG('flame'));
-        }
+    if (remoteIsNewer) {
+        text.append(createIconSVG('flame'));
+    }
 
-        text.parentNode.classList.add('has-lovely-forks');
-    };
+    text.parentNode.classList.add('has-lovely-forks');
 }
 
 function makeRemoteDataURL(user, repo) {
-    return 'https://api.github.com/repos/' +
-                  user + '/' + repo + '/forks?sort=stargazers';
+    return `https://api.github.com/repos/${user}/${repo}/forks?sort=stargazers`;
 }
 
 function makeCommitDiffURL(user, repo, remoteUser, default_branch) {
-    return 'https://api.github.com/repos/' +
-                  user + '/' + repo + '/compare/' +
-                  user + ':' + default_branch + '...' +
-                  remoteUser + ':' + default_branch;
+    return `https://api.github.com/repos/${user}/${repo}/compare/${user}:${default_branch}...${remoteUser}:${default_branch}`;
 }
 
 
 // From: http://crocodillon.com/blog/always-catch-localstorage-security-and-quota-exceeded-errors
 function isQuotaExceeded(e) {
-    var quotaExceeded = false;
+    let quotaExceeded = false;
     if (e) {
         if (e.code) {
             switch (e.code) {
@@ -224,30 +184,31 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
         /* Parse fork data */
         /* Can either be just one data element,
          * or could be the list of all forks. */
-        var allForksData = JSON.parse(remoteDataStr);
-        var mostStarredFork = allForksData[0];
+        const allForksData = JSON.parse(remoteDataStr);
+        const mostStarredFork = allForksData[0];
 
-        var forkUrl = mostStarredFork['html_url'],
-            fullName = mostStarredFork['full_name'];
+        const forkUrl = mostStarredFork['html_url'];
+        const fullName = mostStarredFork['full_name'];
 
         /* Parse self data */
         /* This could either be the commit-diff data (v2)
          * or `all_commits` data (v1). */
         /* selfData can also be null, if the commit difference API resulted in
          * an error. */
-        var selfData = JSON.parse(selfDataStr),
-            selfDataToSave = selfData,
-            remoteIsNewer = false;
+        const selfData = JSON.parse(selfDataStr);
+
+        let selfDataToSave = selfData;
+        let remoteIsNewer = false;
 
         if (selfData !== null) {
             if (selfData.hasOwnProperty('ahead_by')) {
                 // New version
-                var diffData = selfData;
+                const diffData = selfData;
                 remoteIsNewer = (diffData['ahead_by'] - diffData['behind_by']) > 0;
             } else {
                 // Old version
-                var allCommits = selfData;
-                var remoteUpdateTimeMs = mbStrToMs(mostStarredFork['pushed_at']);
+                const allCommits = selfData;
+                const remoteUpdateTimeMs = mbStrToMs(mostStarredFork['pushed_at']);
 
                 if (!allCommits || allCommits.length < 1) {
                     if (DEBUG) {
@@ -257,8 +218,8 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
                     return;
                 }
 
-                var latestCommit = allCommits[0]['commit'];
-                var committer = latestCommit['committer'];
+                const latestCommit = allCommits[0]['commit'];
+                const committer = latestCommit['committer'];
 
                 if (!committer) {
                     if (DEBUG) {
@@ -268,7 +229,7 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
                     return;
                 }
 
-                var selfUpdateTimeMs = mbStrToMs(committer['date']);
+                const selfUpdateTimeMs = mbStrToMs(committer['date']);
 
                 remoteIsNewer = remoteUpdateTimeMs > selfUpdateTimeMs;
                 selfDataToSave = [allCommits[0]];
@@ -279,7 +240,7 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
 
         /* Cache data, if necessary */
         if (isFreshData) {
-            var currentTimeMs = (new Date()).toString();
+            const currentTimeMs = (new Date()).toString();
 
             if (DEBUG) {
                 console.log(_logName, 'Saving data');
@@ -290,12 +251,12 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
                 localStorage.setItem(makeTimeKey(user, repo), currentTimeMs);
 
                 // Only the most starred fork is relevant
-                var relevantRemoteDataStr = JSON.stringify([mostStarredFork]);
+                const relevantRemoteDataStr = JSON.stringify([mostStarredFork]);
                 localStorage.setItem(makeRemoteDataKey(user, repo),
                                      relevantRemoteDataStr);
 
                 // Only the latest commit is relevant
-                var relevantSelfDataStr = JSON.stringify(selfDataToSave);
+                const relevantSelfDataStr = JSON.stringify(selfDataToSave);
                 localStorage.setItem(makeSelfDataKey(user, repo),
                                      relevantSelfDataStr);
             } catch(e) {
@@ -309,7 +270,7 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
 
         // Now if the repository doesn't have any notable forks, so not
         // touch the DOM.
-        var starGazers = mostStarredFork['stargazers_count'];
+        const starGazers = mostStarredFork['stargazers_count'];
 
         if (!starGazers) {
             if (DEBUG) {
@@ -319,7 +280,7 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
             return;
         }
 
-        safeUpdateDOM(showDetails(fullName, forkUrl, starGazers,
+        safeUpdateDOM(() => showDetails(fullName, forkUrl, starGazers,
                                   remoteIsNewer),
                       'showing details');
     } catch (e) {
@@ -329,82 +290,56 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
     }
 }
 
-function onreadystatechangeFactory(xhr, successFn) {
-    return function () {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                successFn();
-            } else if (xhr.status === 403) {
-                console.warn(_logName,
-                             'Looks like the rate-limit was exceeded.');
-            } else {
-                console.warn(_logName,
-                             'GitHub API returned status:', xhr.status);
-            }
-        } else {
-            // Request is still in progress
-            // Do nothing.
+async function makeFreshRequest(user, repo) {
+    const response = await fetch(makeRemoteDataURL(user, repo));
+
+    if (response.status === 403) {
+        return console.warn(_logName,
+                     'Looks like the rate-limit was exceeded.');
+    }
+
+    if (!response.ok) {
+        return console.warn(_logName,
+                     'GitHub API returned status:', response.status);
+    }
+
+    const [mostStarredFork] = await response.json();
+
+    if (!mostStarredFork) {
+        if (DEBUG) {
+            console.log(_logName,
+                        'Repository does not have any forks.');
         }
-    };
-}
+        return;
+    }
 
-function makeFreshRequest(user, repo) {
-    var xhrFork = new XMLHttpRequest();
+    const forksDataStr = JSON.stringify([mostStarredFork]);
+    const defaultBranch = mostStarredFork['default_branch'];
+    const remoteUser    = mostStarredFork['owner']['login'];
 
-    xhrFork.onreadystatechange = onreadystatechangeFactory(
-        xhrFork,
-        function () {
-            var forksDataJson = JSON.parse(xhrFork.responseText);
-            if (!forksDataJson || forksDataJson.length === 0) {
-                if (DEBUG) {
-                    console.log(_logName,
-                                'Repository does not have any forks.');
-                }
-                return;
-            }
+    const response2 = await fetch(makeCommitDiffURL(user, repo, remoteUser, defaultBranch));
 
-            var mostStarredFork = forksDataJson[0],
-                forksDataStr = JSON.stringify([mostStarredFork]);
+    let commitDiffStr = null;
+    if (response2.ok) {
+        const commitDiffJson = await response2.json();
+        // Dropping the list of commits to conserve space.
+        delete commitDiffJson.commits;
+        commitDiffStr = JSON.stringify(commitDiffJson);
+    }
 
-            var defaultBranch = mostStarredFork['default_branch'],
-                remoteUser    = mostStarredFork['owner']['login'];
-
-            var xhrDiff = new XMLHttpRequest();
-
-            xhrDiff.onreadystatechange = function () {
-                if (xhrDiff.readyState === 4) {
-                    if (xhrDiff.status === 200) {
-                        var commitDiffJson = JSON.parse(xhrDiff.responseText);
-                        // Dropping the list of commits to conserve space.
-                        commitDiffJson['commits'] = [];
-                        var commitDiffStr = JSON.stringify(commitDiffJson);
-                        processWithData(user, repo, forksDataStr, commitDiffStr, true);
-                    } else {
-                        // In case of any error, ignore recency data.
-                        processWithData(user, repo, forksDataStr, null, true);
-                    }
-                }
-            };
-
-            xhrDiff.open('GET', makeCommitDiffURL(user, repo, remoteUser, defaultBranch));
-            xhrDiff.send();
-        }
-    );
-
-    xhrFork.open('GET', makeRemoteDataURL(user, repo));
-    xhrFork.send();
+    processWithData(user, repo, forksDataStr, commitDiffStr, true);
 }
 
 function getDataFor(user, repo) {
-    var lfTimeKey       = makeTimeKey(user, repo),
-        lfRemoteDataKey = makeRemoteDataKey(user, repo),
-        lfSelfDataKey   = makeSelfDataKey(user, repo);
+    const lfTimeKey       = makeTimeKey(user, repo);
+    const lfRemoteDataKey = makeRemoteDataKey(user, repo);
+    const lfSelfDataKey   = makeSelfDataKey(user, repo);
 
-    var ret = { hasData: false };
+    const ret = { hasData: false };
 
-    var savedRemoteDataStr = localStorage.getItem(lfRemoteDataKey);
-    var savedSelfDataStr   = localStorage.getItem(lfSelfDataKey);
-    var saveTimeMs         = mbStrToMs(localStorage.getItem(lfTimeKey));
+    const savedRemoteDataStr = localStorage.getItem(lfRemoteDataKey);
+    const savedSelfDataStr   = localStorage.getItem(lfSelfDataKey);
+    const saveTimeMs         = mbStrToMs(localStorage.getItem(lfTimeKey));
 
     if (saveTimeMs         === null ||
         savedRemoteDataStr === null ||
@@ -422,7 +357,7 @@ function getDataFor(user, repo) {
 
 function runFor(user, repo) {
     try {
-        var cache = getDataFor(user, repo);
+        const cache = getDataFor(user, repo);
         if (cache.hasData && !isExpired(cache.saveTimeMs)) {
             if (DEBUG) {
                 console.log(_logName,
@@ -439,16 +374,15 @@ function runFor(user, repo) {
             makeFreshRequest(user, repo);
         }
     } catch (e) {
-        console.error(_logName, 'Could not run for ', user + '/' + repo,
+        console.error(_logName, 'Could not run for ', `${user}/${repo}`,
                       'Exception: ', e);
     }
 }
 
 /* Script execution */
 
-var pathComponents = window.location.pathname.split('/');
-if (pathComponents.length >= 3) {
-    var user = pathComponents[1], repo = pathComponents[2];
+const [, user, repo] = window.location.pathname.split('/');
+if (user && repo) {
     runFor(user, repo);
 } else {
     if (DEBUG) {
