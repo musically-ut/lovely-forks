@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lovely forks preferences</title>
+  <link rel="stylesheet" href="./css/semantic.min.css">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <article class="centered">
+    <section class="heading">
+      <h1 class="ui block header">
+        <img src="../icons/Heart_and_fork_inside_128.png" alt="Lovely Forks icon">
+        <div class="content">
+          Lovely forks
+          <div class="sub header">Did someone give a fork?</div>
+        </div>
+      </h1>
+    </section>
+
+    <section class="ui settings basic segment">
+      <div class="ui js-no-value-store-error icon hidden error message">
+        <i class="warning sign icon"></i>
+        Storage API was not found! Cannot save settings.
+      </div>
+
+      <p>How many stars should a fork have before we show it?</p>
+      <div class="ui form">
+        <div class="ui field">
+          <div class="ui labeled input">
+            <div class="ui label">Minimum stars:</div>
+            <input id="star_threshold" class="js-star-threshold" type="number" min="0">
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </article>
+  <script src="./js/jquery-3.2.1.min.js"></script>
+  <script src="./js/semantic.min.js"></script>
+  <script src="./js/main.js"></script>
+</body>
+</html>

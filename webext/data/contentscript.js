@@ -1,8 +1,21 @@
 /*jshint browser: true, es5: true, sub:true */
 
 const _logName = 'lovely-forks:';
-const DEBUG = false;
+const STAR_THRES_KEY = "star_thres_key";
+const DEBUG = true;
 let text;
+
+function getStarThreshold() {
+    return new Promise((resolve, reject) => {
+        chrome.storage.local.get(STAR_THRES_KEY, (x) => {
+            const thres = x[STAR_THRES_KEY] || 1;
+            if (DEBUG) {
+                console.log(_logName, `Threshold value = ${thres}`);
+            }
+            resolve(thres);
+        });
+    });
+}
 
 function createIconSVG(type) {
     const icon = document.createElement('img');
@@ -140,7 +153,8 @@ function showDetails(fullName, url, numStars, remoteIsNewer) {
     forkA.href = url;
     forkA.append(fullName);
 
-    text.append('also forked to ', forkA, ' ', createIconSVG('star'), `${numStars} `);
+    text.append('also forked to ', forkA, ' ',
+                createIconSVG('star'), `${numStars} `);
 
     if (remoteIsNewer) {
         text.append(createIconSVG('flame'));
@@ -179,7 +193,8 @@ function isQuotaExceeded(e) {
     return quotaExceeded;
 }
 
-function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
+function processWithData(user, repo, remoteDataStr,
+                         selfDataStr, isFreshData, starThreshold) {
     try {
         /* Parse fork data */
         /* Can either be just one data element,
@@ -272,10 +287,10 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
         // touch the DOM.
         const starGazers = mostStarredFork['stargazers_count'];
 
-        if (!starGazers) {
+        if (!starGazers || starGazers < starThreshold) {
             if (DEBUG) {
                 console.log(_logName,
-                            'Repo has only zero starred forks.');
+                            `Repo has ${starGazers} < ${starThreshold} stars.`);
             }
             return;
         }
@@ -317,7 +332,8 @@ async function makeFreshRequest(user, repo) {
     const defaultBranch = mostStarredFork['default_branch'];
     const remoteUser    = mostStarredFork['owner']['login'];
 
-    const response2 = await fetch(makeCommitDiffURL(user, repo, remoteUser, defaultBranch));
+    const response2 = await fetch(makeCommitDiffURL(user, repo, remoteUser,
+                                                    defaultBranch));
 
     let commitDiffStr = null;
     if (response2.ok) {
@@ -327,7 +343,9 @@ async function makeFreshRequest(user, repo) {
         commitDiffStr = JSON.stringify(commitDiffJson);
     }
 
-    processWithData(user, repo, forksDataStr, commitDiffStr, true);
+    let starThreshold = await getStarThreshold();
+    processWithData(user, repo, forksDataStr,
+                    commitDiffStr, true, starThreshold);
 }
 
 function getDataFor(user, repo) {
@@ -355,7 +373,7 @@ function getDataFor(user, repo) {
     return ret;
 }
 
-function runFor(user, repo) {
+async function runFor(user, repo) {
     try {
         const cache = getDataFor(user, repo);
         if (cache.hasData && !isExpired(cache.saveTimeMs)) {
@@ -363,9 +381,10 @@ function runFor(user, repo) {
                 console.log(_logName,
                             'Reusing saved data.');
             }
+            const starThreshold = await getStarThreshold();
             processWithData(user, repo,
                             cache.savedRemoteDataStr, cache.savedSelfDataStr,
-                            false);
+                            false, starThreshold);
         } else {
             if (DEBUG) {
                 console.log(_logName,
