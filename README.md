@@ -87,12 +87,12 @@ The final archives are kept in the `./build` folder.
 
 ### Testing
 
-For testing, the extension can be loaded into Chrome by going to [chrome://extensions](chrome://extensions) and clicking on the <kbd>Load Unpacked Extension</kbd> button.
+For testing, the extension can be loaded into Chrome by going to [`chrome://extensions`](chrome://extensions) and clicking on the <kbd>Load Unpacked Extension</kbd> button.
 Then navigate to the `.tmp` folder in the source code root which was created by running `make chrome` and load it.
 
-For Firefox, the easiest way to test the packaged extension would be to download the [unbranded build](https://wiki.mozilla.org/Add-ons/Extension_Signing#Latest_Builds) or the [Developer Edition](https://www.mozilla.org/en-GB/firefox/developer/) and loading the extension there. Otherwise, one would need to _sign_ the extension via your account on their Addon server. Go to [about:addons](about:addons), to the _Extensions_ Tab and click the Gear icon (Settings) on the top right to load the packed extension.
+For Firefox, the easiest way to test the packaged extension would be to download the [unbranded build](https://wiki.mozilla.org/Add-ons/Extension_Signing#Latest_Builds) or the [Developer Edition](https://www.mozilla.org/en-GB/firefox/developer/) and loading the extension there. Otherwise, one would need to _sign_ the extension via your account on their Addon server. Go to [`about:addons`](about:addons), to the _Extensions_ Tab and click the Gear icon (Settings) on the top right to load the packed extension.
 
-If the browser still complains that the package has not been signed, then go to [about:config](about:config) and set `xpinstall.signatures.required` to `false`. Note that this setting only takes effect on the Developer Edition and the Unbranded versions of the browser even though it shows up in `about:config` pages of the release channel versions as well.
+If the browser still complains that the package has not been signed, then go to [`about:config`](about:config) and set `xpinstall.signatures.required` to `false`. Note that this setting only takes effect on the Developer Edition and the Unbranded versions of the browser even though it shows up in `about:config` pages of the release channel versions as well.
 
 ## Acknowledgements
 
@@ -103,7 +103,7 @@ This project uses icons made by
 [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/).
 
 [bfred-it](https://github.com/bfred-it) has contributed to improving the look
-and feel of the extension considerably.
+and feel of the extension considerably. He also brought the extension from the [dark age into the space age](https://github.com/musically-ut/lovely-forks/pull/38) of JavaScript.
 
 [izuzak](https://github.com/izuzak) from GitHub was instrumental in helping me
 with bug fixing and suggesting [compare API](https://developer.github.com/v3/repos/commits/#compare-two-commits) 
