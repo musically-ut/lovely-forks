@@ -20,7 +20,7 @@ function savePref() {
         [INDENT_KEY]: indent,
         [STAR_THRES_KEY]: thres
     };
-    chrome.storage.local.set({ [LF_PREF_KEY]: pref }, () => {
+    chrome.storage.local.set({[LF_PREF_KEY]: pref}, () => {
         if (DEBUG) {
             if (chrome.runtime.lastError) {
                 console.log('Error occurred:', chrome.runtime.lastError);
