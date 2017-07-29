@@ -3,6 +3,21 @@
     "version": "2.6.1",
     "dependencies": {},
     "devDependencies": {
-        "web-ext": "^1.10.1"
+        "web-ext": "^1.10.1",
+        "xo": "^0.18.0"
+    },
+    "xo": {
+        "ignores": ["webext/options_ui/js/semantic.min.js",
+                    "webext/options_ut/js/jquery-3.2.1.min.js",
+                    "userscript/*.js"],
+        "globals": ["chrome", "window", "$", "document", "localStorage",
+                    "fetch"],
+        "space": 4,
+        "rules": {
+            "dot-notation": 0,
+            "no-multi-spaces": 0,
+            "max-params": 0,
+            "max-depth": 0
+        }
     }
 }

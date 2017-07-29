@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lovely forks preferences</title>
+  <link rel="stylesheet" href="./css/semantic.min.css">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <article class="centered">
+    <section class="heading">
+      <h1 class="ui block header">
+        <img src="../icons/Heart_and_fork_inside_128.png" alt="Lovely Forks icon">
+        <div class="content">
+          Lovely forks
+          <div class="sub header">Did someone give a fork?</div>
+        </div>
+      </h1>
+    </section>
+
+    <section class="ui settings basic segment">
+      <div class="ui js-no-value-store-error icon hidden error message">
+        <i class="warning sign icon"></i>
+        Storage API was not found! Cannot save settings.
+      </div>
+
+      <p>How many stars should a fork have before we show it?</p>
+      <div class="ui form">
+        <div class="ui field">
+          <div class="ui labeled input">
+            <div class="ui label">Minimum stars:</div>
+            <input id="star_threshold" class="js-star-threshold" type="number" min="1">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ui settings basic segment">
+      <p>Should the message under the GitHub name be indented?</p>
+      <div class="ui form centered-field">
+          <span class="ui right aligned basic label">do not indent</span>
+          <div class="ui fitted toggle checkbox js-to-indent to-indent">
+            <input id="to_indent" type="checkbox">
+          </div>
+          <span  class="ui left aligned basic label">indent</span>
+        </div>
+      </div>
+    </section>
+
+  </article>
+  <script src="./js/jquery-3.2.1.min.js"></script>
+  <script src="./js/semantic.min.js"></script>
+  <script src="./js/main.js"></script>
+</body>
+</html>

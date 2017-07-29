@@ -11,9 +11,13 @@
     "webext/icons/star.svg",
     "webext/icons/flame.svg"
   ],
+  "options_ui": {
+    "page": "webext/options_ui/options.html"
+  },
   "permissions": [
     "*://github.com/*",
-    "*://api.github.com/*"
+    "*://api.github.com/*",
+    "storage"
   ],
   "content_scripts": [
     {

@@ -29,7 +29,7 @@ Also, if the fork is _more recent_ than the upstream, a flame icon is shown
 next to it. These are called [_flamey forks_](https://github.com/musically-ut/lovely-forks/issues/13) 
 as suggested by [Mottie](https://github.com/Mottie).
 
-## Screenshots
+## Use cases
 
 The [tipsy plugin](https://github.com/jaz303/tipsy) hasn't been updated since
 2012 and there is a [community supported
@@ -87,8 +87,11 @@ The final archives are kept in the `./build` folder.
 
 ### Testing
 
-For testing, the extension can be loaded into Chrome by going to [`chrome://extensions`](chrome://extensions) and clicking on the <kbd>Load Unpacked Extension</kbd> button.
-Then navigate to the `.tmp` folder in the source code root which was created by running `make chrome` and load it.
+The [`xo` style checker](https://github.com/sindresorhus/xo) is used for setting the style guide
+in the code.
+
+For testing, the extension can be loaded into Chrome by going to [chrome://extensions](chrome://extensions) and clicking on the <kbd>Load Unpacked Extension</kbd> button.
+Then navigate to the `.tmp` folder in the source code root which was created by running `make chrome` and load it. An alternate is to run `make manifest` in the root folder and then load the source code root as the unpacked extension. This will allow for a simpler edit-reload cycle, except while editing `manifest.json.template`.
 
 For Firefox, the easiest way to test the packaged extension would be to download the [unbranded build](https://wiki.mozilla.org/Add-ons/Extension_Signing#Latest_Builds) or the [Developer Edition](https://www.mozilla.org/en-GB/firefox/developer/) and loading the extension there. Otherwise, one would need to _sign_ the extension via your account on their Addon server. Go to [`about:addons`](about:addons), to the _Extensions_ Tab and click the Gear icon (Settings) on the top right to load the packed extension.
 

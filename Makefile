@@ -9,7 +9,7 @@ readybuild:
 	@rm -rf .tmp/
 	@mkdir -p .tmp/
 	@mkdir -p build/
-	@cp -r webext .tmp/
+	@rsync -av webext .tmp/ --exclude="*.orig" --exclude="*~" --exclude="*.sw?"
 	@cp LICENSE README.md .tmp/
 
 
@@ -23,6 +23,10 @@ firefox: readybuild
 	@echo "Exporting Firefox build"
 	@cp manifest.template.json .tmp/manifest.json
 	@web-ext lint --source-dir=.tmp/ && web-ext build --source-dir=.tmp/ --overwrite-dest --artifacts-dir=build/
+
+
+manifest:
+	@cat manifest.template.json | jq 'del(.applications)' > manifest.json
 
 
 all: firefox chrome
