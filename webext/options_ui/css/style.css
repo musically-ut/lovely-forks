@@ -1,6 +1,7 @@
 article.centered {
   max-width: 420px;
   margin: auto;
+  margin-top: 1em;
 }
 
 html, body {
@@ -13,6 +14,12 @@ html, body {
 }
 
 .centered-field .label {
-  padding-left: 1em;
-  padding-right: 1em;
+  font-variant: small-caps;
+}
+
+.ui.to-indent {
+  margin-left: 1em;
+  margin-right: 1em;
+  display: flex;
+  align-items: center;
 }
