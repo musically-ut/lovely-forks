@@ -1,9 +1,18 @@
-.centered {
+article.centered {
   max-width: 420px;
   margin: auto;
-  margin-top: 1.25rem;
 }
 
 html, body {
   background: transparent;
+}
+
+.centered-field {
+  display: flex;
+  justify-content: center;
+}
+
+.centered-field .label {
+  padding-left: 1em;
+  padding-right: 1em;
 }

@@ -6,6 +6,9 @@
 /* smoother integration, show hierarchy */
 .lovely-forks-addon {
     animation: fade-in 0.2s;
+}
+
+.lovely-forks-addon.indented {
     padding-left: 1em;
 }
 

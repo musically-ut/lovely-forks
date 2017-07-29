@@ -1,21 +1,35 @@
-const STAR_THRES_KEY = "star_thres_key";
+/* jshint browser: true, es5: true, sub:true */
 
-chrome.storage.local.get(STAR_THRES_KEY, (x) => {
-  const thres = x[STAR_THRES_KEY] || 1;
-  $('.js-star-threshold').val(thres);
-})
+const DEBUG = true;
+const STAR_THRES_KEY = 'STAR_THRES_KEY';
+const INDENT_KEY = 'INDENT_KEY';
+const LF_PREF_KEY = 'LF_PREF_KEY';
 
-$('.js-star-threshold').on('change', (ev) => {
-  let thres = ev.target.value;
-  if (thres >= 0) {
-    chrome.storage.local.set({ [STAR_THRES_KEY]: thres },
-      () => {
-        if (chrome.runtime.lastError) {
-          console.log('Error occurred:', chrome.runtime.lastError);
-        } else {
-          console.log(`Value successfully set to ${thres}.`);
-        }
-      }
-    );
-  }
+chrome.storage.local.get(LF_PREF_KEY, x => {
+    x = x[LF_PREF_KEY] || {};
+    const thres = x[STAR_THRES_KEY] || 1;
+    const indent = x[INDENT_KEY] || false;
+    $('.js-star-threshold').val(thres);
+    $('.js-to-indent').checkbox(indent ? 'set checked' : 'set unchecked');
 });
+
+function savePref() {
+    const thres = $('.js-star-threshold').val() || 0;
+    const indent = $('.js-to-indent').checkbox('is checked') || false;
+    const pref = {
+        [INDENT_KEY]: indent,
+        [STAR_THRES_KEY]: thres
+    };
+    chrome.storage.local.set({ [LF_PREF_KEY]: pref }, () => {
+        if (DEBUG) {
+            if (chrome.runtime.lastError) {
+                console.log('Error occurred:', chrome.runtime.lastError);
+            } else {
+                console.log(`Pref set to ${JSON.stringify(pref)}.`);
+            }
+        }
+    });
+}
+
+$('.js-to-indent.ui.checkbox').checkbox({onChange: savePref});
+$('.js-star-threshold').on('change', savePref);
