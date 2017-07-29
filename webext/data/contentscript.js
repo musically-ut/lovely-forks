@@ -4,7 +4,7 @@ const _logName = 'lovely-forks:';
 const STAR_THRES_KEY = 'STAR_THRES_KEY';
 const INDENT_KEY = 'INDENT_KEY';
 const LF_PREF_KEY = 'LF_PREF_KEY';
-const DEBUG = true;
+const DEBUG = false;
 let text;
 
 function getPreferences() {
