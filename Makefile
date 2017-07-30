@@ -22,7 +22,8 @@ chrome: readybuild
 firefox: readybuild
 	@echo "Exporting Firefox build"
 	@cp manifest.template.json .tmp/manifest.json
-	@web-ext lint --source-dir=.tmp/ && web-ext build --source-dir=.tmp/ --overwrite-dest --artifacts-dir=build/
+	@web-ext lint --source-dir=.tmp/ --ignore-files "webext/options_ui/js/semantic.min.js" "webext/options_ui/js/jquery*.min.js"  
+	@web-ext build --source-dir=.tmp/ --overwrite-dest --artifacts-dir=build/
 
 
 manifest:
