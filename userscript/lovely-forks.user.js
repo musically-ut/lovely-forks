@@ -11,6 +11,13 @@
 // @run-at       document-end
 // ==/UserScript==
 
+/* WARNING: This usescript was created from a legacy version of Lovely Forks
+ * which does not support user preferences setting and maintains code in pre-ES6
+ * JavaScript format which ought to be supported by most browsers out there.
+ * If you are using Firefox or Chrome, it is best to use the respective 
+ * extension/addon for your browser for a better experience.
+ */
+
 'use strict';
 /*jshint browser: true, es5: true, sub:true */
 
