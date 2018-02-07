@@ -7,8 +7,8 @@
         "xo": "^0.18.0"
     },
     "xo": {
-        "ignores": ["webext/options_ui/js/semantic.min.js",
-                    "webext/options_ut/js/jquery-3.2.1.min.js",
+        "ignores": ["webext/options_ui/js/semantic.js",
+                    "webext/options_ui/js/jquery-*.js",
                     "userscript/*.js"],
         "globals": ["chrome", "window", "$", "document", "localStorage",
                     "fetch"],
