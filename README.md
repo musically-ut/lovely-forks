@@ -114,3 +114,5 @@ for improving the heuristic to determine if a fork is more recent than the upstr
 repository.
 
 [yfdyh000](https://github.com/yfdyh000) added a [userscript version](https://greasyfork.org/en/scripts/31469-lovely-forks) and made the switch from Firefox Addon SDK to Web-extensions.
+
+[Jackymancs4](https://github.com/Jackymancs4) fixed [a bug](https://github.com/musically-ut/lovely-forks/issues/40) and re-enabled the settings page.
