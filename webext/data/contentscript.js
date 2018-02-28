@@ -132,7 +132,7 @@ function clearLocalStorage() {
 }
 
 function olderThanDays(date, days) {
-    const diff = Math.floor(( new Date() - Date.parse(date) ) / 86400000);
+    const diff = Math.floor((new Date() - Date.parse(date)) / 86400000);
 
     return diff >= days;
 }
