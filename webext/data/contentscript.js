@@ -4,6 +4,7 @@ const _logName = 'lovely-forks:';
 const STAR_THRES_KEY = 'STAR_THRES_KEY';
 const INDENT_KEY = 'INDENT_KEY';
 const LF_PREF_KEY = 'LF_PREF_KEY';
+const DAYS_THRES_KEY = 'DAYS_THRES_KEY';
 const DEBUG = false;
 let text;
 
@@ -18,6 +19,7 @@ function getPreferences() {
             x = x[LF_PREF_KEY] || {};
 
             pref[STAR_THRES_KEY] = x[STAR_THRES_KEY] || 1;
+            pref[DAYS_THRES_KEY] = x[DAYS_THRES_KEY] || 0;
             pref[INDENT_KEY] = x[INDENT_KEY] || false;
 
             if (DEBUG) {
@@ -127,6 +129,12 @@ function clearLocalStorage() {
             }
         }
     }
+}
+
+function olderThanDays(date, days) {
+    const diff = Math.floor(( new Date() - Date.parse(date) ) / 86400000);
+
+    return diff >= days;
 }
 
 function removeFromLocalStorage(key) {
@@ -260,6 +268,15 @@ function processWithData(user, repo, remoteDataStr,
 
                 remoteIsNewer = remoteUpdateTimeMs > selfUpdateTimeMs;
                 selfDataToSave = [allCommits[0]];
+            }
+
+            if (pref[DAYS_THRES_KEY] !== 0) {
+                const lastCommit = selfData.base_commit.commit.author.date;
+                const days = pref[DAYS_THRES_KEY];
+
+                if (lastCommit && !olderThanDays(lastCommit, days)) {
+                    return;
+                }
             }
         } else {
             remoteIsNewer = false;
