@@ -116,3 +116,5 @@ repository.
 [yfdyh000](https://github.com/yfdyh000) added a [userscript version](https://greasyfork.org/en/scripts/31469-lovely-forks) and made the switch from Firefox Addon SDK to Web-extensions.
 
 [Jackymancs4](https://github.com/Jackymancs4) fixed [a bug](https://github.com/musically-ut/lovely-forks/issues/40) and re-enabled the settings page.
+
+[olso](https://github.com/olso) added an option to set how many days old the last commit on the current repository should be before the forks are shown.
