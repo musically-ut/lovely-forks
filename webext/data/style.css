@@ -1,5 +1,5 @@
 /* placeholder */
-.repohead-details-container > div > div:not(.has-lovely-forks) {
+.repohead > div > div:not(.has-lovely-forks) {
     padding-bottom: 12px;
 }
 
