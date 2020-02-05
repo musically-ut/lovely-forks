@@ -10,3 +10,4 @@ package
 lovely-forks*.zip
 build/
 manifest.json
+tmp/
