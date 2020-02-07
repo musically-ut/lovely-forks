@@ -87,7 +87,7 @@ The final archives are kept in the `./build` folder.
 
 ### Testing
 
-The [`xo` style checker](https://github.com/sindresorhus/xo) is used for setting the style guide
+The [`StandardJS` style checker](https://github.com/standard/standard) is used for setting the style guide
 in the code.
 
 For testing, the extension can be loaded into Chrome by going to [chrome://extensions](chrome://extensions) and clicking on the <kbd>Load Unpacked Extension</kbd> button.
