@@ -1,6 +1,6 @@
 /* placeholder */
-.repohead > div > div:not(.has-lovely-forks) {
-    padding-bottom: 12px;
+main > div > div > div:not(.has-lovely-forks) {
+    padding-bottom: 20px;
 }
 
 /* smoother integration, show hierarchy */
@@ -20,5 +20,5 @@
 
 /* icons */
 .lovely-forks-addon img {
-    vertical-align: bottom;
+    vertical-align: middle;
 }

@@ -87,8 +87,7 @@ The final archives are kept in the `./build` folder.
 
 ### Testing
 
-The [`StandardJS` style checker](https://github.com/standard/standard) is used for setting the style guide
-in the code.
+The [`StandardJS` style checker](https://github.com/standard/standard) is used for setting the style guide in the code.
 
 For testing, the extension can be loaded into Chrome by going to [chrome://extensions](chrome://extensions) and clicking on the <kbd>Load Unpacked Extension</kbd> button.
 Then navigate to the `.tmp` folder in the source code root which was created by running `make chrome` and load it. An alternate is to run `make manifest` in the root folder and then load the source code root as the unpacked extension. This will allow for a simpler edit-reload cycle, except while editing `manifest.json.template`.
