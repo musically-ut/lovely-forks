@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Lovely Forks
 // @namespace    musically-ut
-// @version      2.6.2
+// @version      2.6.3
 // @description  Show notable forks of GitHub projects.
 // @homepage     https://github.com/musically-ut/lovely-forks
 // @icon         https://github.com/musically-ut/lovely-forks/raw/master/userscript/icon.png
@@ -135,7 +135,7 @@ function getForksElement() {
 
     // If the layout of the page changes, we'll have to change this location.
     // We should make sure that we do not accidentally cause errors here.
-    var repoName = document.querySelector('.repohead > div > div');
+    var repoName = document.querySelector('main > div > div > div');
     if (repoName) {
         try {
             text = document.createElement('span');
