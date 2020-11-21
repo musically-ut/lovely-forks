@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Lovely Forks
 // @namespace    musically-ut
-// @version      2.6.3
+// @version      2.6.4
 // @description  Show notable forks of GitHub projects.
 // @homepage     https://github.com/musically-ut/lovely-forks
 // @icon         https://github.com/musically-ut/lovely-forks/raw/master/userscript/icon.png
@@ -61,7 +61,7 @@ function createIconSVG(type) {
     svg.setAttributeNS(null, 'height', 12);
     svg.setAttributeNS(null, 'width', 10.5);
     svg.setAttributeNS(null, 'viewBox', '0 0 14 16');
-    svg.style['vertical-align'] = 'bottom';
+    svg.style['vertical-align'] = 'middle';
     svg.style['fill'] = 'currentColor';
 
     svg.classList.add('opticon', 'opticon-' + type);
