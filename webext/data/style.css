@@ -6,6 +6,10 @@ main > div > div:not(.repository-content) > div:not(.has-lovely-forks) {
 /* smoother integration, show hierarchy */
 .lovely-forks-addon {
     animation: fade-in 0.2s;
+    line-height: 1 !important;
+    font-size: 12px !important;
+    white-space: nowrap !important;
+    margin-top: 4px;
 }
 
 .lovely-forks-addon.indented {
