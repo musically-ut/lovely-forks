@@ -87,7 +87,7 @@ function getForksElement () {
 
   // If the layout of the page changes, we'll have to change this location.
   // We should make sure that we do not accidentally cause errors here.
-  const repoName = document.querySelector('main > div > div > div')
+  const repoName = document.querySelector('main > div > div:not(.repository-content) > div')
   if (repoName) {
     try {
       text = document.createElement('span')
