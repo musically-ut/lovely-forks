@@ -117,3 +117,5 @@ repository.
 [Jackymancs4](https://github.com/Jackymancs4) fixed [a bug](https://github.com/musically-ut/lovely-forks/issues/40) and re-enabled the settings page.
 
 [olso](https://github.com/olso) added an option to set how many days old the last commit on the current repository should be before the forks are shown.
+
+[Jorgen1040](https://github.com/Jorgen1040) helped fix a bug about multiple "also forked" messages appearing.
