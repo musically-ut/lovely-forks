@@ -3,6 +3,7 @@
 
 const _logName = 'lovely-forks:'
 const STAR_THRES_KEY = 'STAR_THRES_KEY'
+const SKIP_REPOS_KEY = 'SKIP_REPOS_KEY'
 const INDENT_KEY = 'INDENT_KEY'
 const LF_PREF_KEY = 'LF_PREF_KEY'
 const DAYS_THRES_KEY = 'DAYS_THRES_KEY'
@@ -20,6 +21,7 @@ function getPreferences () {
       x = x[LF_PREF_KEY] || {}
 
       pref[STAR_THRES_KEY] = x[STAR_THRES_KEY] || 1
+      pref[SKIP_REPOS_KEY] = x[SKIP_REPOS_KEY] || ""
       pref[DAYS_THRES_KEY] = x[DAYS_THRES_KEY] || 0
       pref[INDENT_KEY] = x[INDENT_KEY] || false
 
@@ -218,6 +220,13 @@ function isQuotaExceeded (e) {
 function processWithData (user, repo, remoteDataStr,
   selfDataStr, isFreshData, pref) {
   try {
+    /* Skip displaying if the repo is in the skip list */
+    const skipRepos = pref[SKIP_REPOS_KEY].split(/[\s\n,]+/)
+    const inSkipList = skipRepos.some(val => val.indexOf(user + "/" + repo) > -1)
+    if (inSkipList) {
+      return
+    }
+
     /* Parse fork data */
     /* Can either be just one data element,
          * or could be the list of all forks. */
