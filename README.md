@@ -119,3 +119,5 @@ repository.
 [olso](https://github.com/olso) added an option to set how many days old the last commit on the current repository should be before the forks are shown.
 
 [Jorgen1040](https://github.com/Jorgen1040) helped fix a bug about multiple "also forked" messages appearing.
+
+[francislavoie](https://github.com/francislavoie) implemented a [repo skip list](https://github.com/musically-ut/lovely-forks/pull/74), to not show forks on specific repos.
