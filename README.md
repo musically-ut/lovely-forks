@@ -95,6 +95,10 @@ For Firefox, the easiest way to test the packaged extension would be to download
 
 If the browser still complains that the package has not been signed, then go to [`about:config`](about:config) and set `xpinstall.signatures.required` to `false`. Note that this setting only takes effect on the Developer Edition and the Unbranded versions of the browser even though it shows up in `about:config` pages of the release channel versions as well.
 
+## See Also
+
+ - [useful-forks.github.io](https://github.com/useful-forks/useful-forks.github.io) and their Chrome extension.
+
 ## Acknowledgements
 
 This project uses icons made by
