@@ -170,7 +170,6 @@ function safeUpdateDOM (action, actionName) {
 }
 
 function showDetails (fullName, url, numStars, remoteIsNewer, indented) {
-  if (text.parentNode.classList.contains('has-lovely-forks')) return
   const forkA = document.createElement('a')
   forkA.href = url
   forkA.append(fullName)
