@@ -97,7 +97,7 @@ If the browser still complains that the package has not been signed, then go to 
 
 ## See Also
 
- - [useful-forks.github.io](https://github.com/useful-forks/useful-forks.github.io) and their Chrome extension.
+ - [useful-forks.github.io](https://github.com/useful-forks/useful-forks.github.io) and [their Chrome extension](https://chrome.google.com/webstore/detail/useful-forks/aflbdmaojedofngiigjpnlabhginodbf).
 
 ## Acknowledgements
 
