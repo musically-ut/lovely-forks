@@ -9,6 +9,6 @@
         "eslint-plugin-node": "^11.0.0",
         "eslint-plugin-promise": "^4.2.1",
         "eslint-plugin-standard": "^4.0.1",
-        "web-ext": "^4.0.0"
+        "web-ext": "^7.5.0"
     }
 }
