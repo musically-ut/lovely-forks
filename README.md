@@ -1,4 +1,4 @@
-![Lovely forks logo](http://musicallyut.in/docs/lovely-forks/logo.png)
+![Lovely forks logo](http://musicallyut.xyz/docs/lovely-forks/logo.png)
 ## Lovely forks
 
 <p><a href="https://addons.mozilla.org/firefox/addon/lovely-forks/"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" width="18" /> Firefox addon</a></p>
@@ -37,7 +37,7 @@ However, the alternative only has 27 stars versus the 1,888 stars of the
 original project (at the time of writing):
 
 <p align="center">
-<img alt="Tipsy plugin" src="https://musicallyut.in/docs/lovely-forks/tipsy-fork.png" width="80%" />
+<img alt="Tipsy plugin" src="https://musicallyut.xyz/docs/lovely-forks/tipsy-fork.png" width="80%" />
 </p>
 
 Similarly, the project [slate](https://github.com/jigish/slate) was last
@@ -46,7 +46,7 @@ fork](https://github.com/mattr-/slate) only has 185 stars (at the time of
 writing):
 
 <p align="center">
-<img alt="slate" src="https://musicallyut.in/docs/lovely-forks/slate-fork.png" width="80%" />
+<img alt="slate" src="https://musicallyut.xyz/docs/lovely-forks/slate-fork.png" width="80%" />
 </p>
 
 In some cases, a new flavour of the project might become visible, like an
@@ -55,7 +55,7 @@ is [Semantic-UI](https://github.com/Semantic-Org/Semantic-UI) in a different
 language):
 
 <p align="center">
-<img alt="semantic-ui" src="https://musicallyut.in/docs/lovely-forks/semantic-fork.png" width="80%" />
+<img alt="semantic-ui" src="https://musicallyut.xyz/docs/lovely-forks/semantic-fork.png" width="80%" />
 </p>
 
 Or provides new features ([vim-fugitive](https://github.com/tpope/vim-fugitive) 
@@ -64,7 +64,7 @@ provides git integration for vim,
 integration):
 
 <p align="center">
-<img alt="vim-fugitive" src="https://musicallyut.in/docs/lovely-forks/fugitive-fork.png" width="80%" />
+<img alt="vim-fugitive" src="https://musicallyut.xyz/docs/lovely-forks/fugitive-fork.png" width="80%" />
 </p>
 
 ## Development
