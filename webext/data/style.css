@@ -1,6 +1,6 @@
 /* placeholder */
 main > div > div:not(.repository-content) > div:not(.has-lovely-forks) {
-    padding-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 /* smoother integration, show hierarchy */
