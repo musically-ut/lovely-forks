@@ -1,25 +1,31 @@
 {
   "name": "Lovely forks",
-  "version": "3.7.2",
-  "manifest_version": 2,
+  "version": "3.7.3",
+  "manifest_version": 3,
   "description": "Show notable forks of GitHub projects.",
   "homepage_url": "https://github.com/musically-ut/lovely-forks",
   "icons": {
     "128": "webext/icons/Heart_and_fork_inside_128.png"
   },
-  "browser_action": {
-    "default_icon": "webext/icons/Heart_and_fork_inside_128.png"
-  },
   "web_accessible_resources": [
-    "webext/icons/star.svg",
-    "webext/icons/flame.svg"
+    {
+      "resources": [
+        "webext/icons/star.svg",
+        "webext/icons/flame.svg"
+      ],
+      "matches": [
+        "*://github.com/*"
+      ]
+    }
   ],
   "options_ui": {
     "page": "webext/options_ui/options.html"
   },
-  "permissions": [
+  "host_permissions": [
     "*://github.com/*",
-    "*://api.github.com/*",
+    "*://api.github.com/*"
+  ],
+  "permissions": [
     "storage"
   ],
   "content_scripts": [
@@ -43,7 +49,7 @@
       "all_frames": true
     }
   ],
-  "applications": {
+  "browser_specific_settings": {
     "gecko": {
       "id": "github-forks-addon@musicallyut.in"
     }
