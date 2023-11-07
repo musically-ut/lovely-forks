@@ -1,0 +1,505 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		85DADBF124B5971300025698 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DADBF024B5971300025698 /* AppDelegate.swift */; };
+		85DADBF424B5971300025698 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85DADBF224B5971300025698 /* Main.storyboard */; };
+		85DADBF624B5971300025698 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DADBF524B5971300025698 /* ViewController.swift */; };
+		85DADBF824B5971400025698 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 85DADBF724B5971400025698 /* Assets.xcassets */; };
+		85DADBFF24B5971400025698 /* Lovely forks Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 85DADBFE24B5971400025698 /* Lovely forks Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		85DADC0424B5971400025698 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85DADC0324B5971400025698 /* Cocoa.framework */; };
+		85DADC0724B5971400025698 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DADC0624B5971400025698 /* SafariWebExtensionHandler.swift */; };
+		85DADC1924B5971500025698 /* webext in Resources */ = {isa = PBXBuildFile; fileRef = 85DADC1424B5971500025698 /* webext */; };
+		85DADC1B24B5971500025698 /* _metadata in Resources */ = {isa = PBXBuildFile; fileRef = 85DADC1624B5971500025698 /* _metadata */; };
+		85DF35F024B5995B002437AB /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 85DF35EF24B5995B002437AB /* manifest.json */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		85DADC0024B5971400025698 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 85DADBE424B5971300025698 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 85DADBFD24B5971400025698;
+			remoteInfo = "Lovely forks Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		85DADC0F24B5971400025698 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				85DADBFF24B5971400025698 /* Lovely forks Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		85DADBEC24B5971300025698 /* Lovely forks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lovely forks.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		85DADBEF24B5971300025698 /* Lovely_forks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lovely_forks.entitlements; sourceTree = "<group>"; };
+		85DADBF024B5971300025698 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		85DADBF324B5971300025698 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		85DADBF524B5971300025698 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		85DADBF724B5971400025698 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		85DADBF924B5971400025698 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		85DADBFE24B5971400025698 /* Lovely forks Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Lovely forks Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		85DADC0324B5971400025698 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		85DADC0624B5971400025698 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		85DADC0824B5971400025698 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		85DADC0924B5971400025698 /* Lovely_forks_Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lovely_forks_Extension.entitlements; sourceTree = "<group>"; };
+		85DADC1424B5971500025698 /* webext */ = {isa = PBXFileReference; lastKnownFileType = folder; path = webext; sourceTree = "<group>"; };
+		85DADC1624B5971500025698 /* _metadata */ = {isa = PBXFileReference; lastKnownFileType = folder; path = _metadata; sourceTree = "<group>"; };
+		85DF35EF24B5995B002437AB /* manifest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		85DADBE924B5971300025698 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		85DADBFB24B5971400025698 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85DADC0424B5971400025698 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		85DADBE324B5971300025698 = {
+			isa = PBXGroup;
+			children = (
+				85DADBEE24B5971300025698 /* Lovely forks */,
+				85DADC0524B5971400025698 /* Lovely forks Extension */,
+				85DADC0224B5971400025698 /* Frameworks */,
+				85DADBED24B5971300025698 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		85DADBED24B5971300025698 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				85DADBEC24B5971300025698 /* Lovely forks.app */,
+				85DADBFE24B5971400025698 /* Lovely forks Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		85DADBEE24B5971300025698 /* Lovely forks */ = {
+			isa = PBXGroup;
+			children = (
+				85DADBEF24B5971300025698 /* Lovely_forks.entitlements */,
+				85DADBF024B5971300025698 /* AppDelegate.swift */,
+				85DADBF224B5971300025698 /* Main.storyboard */,
+				85DADBF524B5971300025698 /* ViewController.swift */,
+				85DADBF724B5971400025698 /* Assets.xcassets */,
+				85DADBF924B5971400025698 /* Info.plist */,
+			);
+			path = "Lovely forks";
+			sourceTree = "<group>";
+		};
+		85DADC0224B5971400025698 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				85DADC0324B5971400025698 /* Cocoa.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		85DADC0524B5971400025698 /* Lovely forks Extension */ = {
+			isa = PBXGroup;
+			children = (
+				85DF35EF24B5995B002437AB /* manifest.json */,
+				85DADC1424B5971500025698 /* webext */,
+				85DADC1624B5971500025698 /* _metadata */,
+				85DADC0624B5971400025698 /* SafariWebExtensionHandler.swift */,
+				85DADC0824B5971400025698 /* Info.plist */,
+				85DADC0924B5971400025698 /* Lovely_forks_Extension.entitlements */,
+			);
+			path = "Lovely forks Extension";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		85DADBEB24B5971300025698 /* Lovely forks */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 85DADC1024B5971400025698 /* Build configuration list for PBXNativeTarget "Lovely forks" */;
+			buildPhases = (
+				85DADBE824B5971300025698 /* Sources */,
+				85DADBE924B5971300025698 /* Frameworks */,
+				85DADBEA24B5971300025698 /* Resources */,
+				85DADC0F24B5971400025698 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				85DADC0124B5971400025698 /* PBXTargetDependency */,
+			);
+			name = "Lovely forks";
+			productName = "Lovely forks";
+			productReference = 85DADBEC24B5971300025698 /* Lovely forks.app */;
+			productType = "com.apple.product-type.application";
+		};
+		85DADBFD24B5971400025698 /* Lovely forks Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 85DADC0C24B5971400025698 /* Build configuration list for PBXNativeTarget "Lovely forks Extension" */;
+			buildPhases = (
+				85DADBFA24B5971400025698 /* Sources */,
+				85DADBFB24B5971400025698 /* Frameworks */,
+				85DADBFC24B5971400025698 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Lovely forks Extension";
+			productName = "Lovely forks Extension";
+			productReference = 85DADBFE24B5971400025698 /* Lovely forks Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		85DADBE424B5971300025698 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1200;
+				LastUpgradeCheck = 1200;
+				TargetAttributes = {
+					85DADBEB24B5971300025698 = {
+						CreatedOnToolsVersion = 12.0;
+					};
+					85DADBFD24B5971400025698 = {
+						CreatedOnToolsVersion = 12.0;
+					};
+				};
+			};
+			buildConfigurationList = 85DADBE724B5971300025698 /* Build configuration list for PBXProject "Lovely forks" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 85DADBE324B5971300025698;
+			productRefGroup = 85DADBED24B5971300025698 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				85DADBEB24B5971300025698 /* Lovely forks */,
+				85DADBFD24B5971400025698 /* Lovely forks Extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		85DADBEA24B5971300025698 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85DADBF824B5971400025698 /* Assets.xcassets in Resources */,
+				85DADBF424B5971300025698 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		85DADBFC24B5971400025698 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85DADC1B24B5971500025698 /* _metadata in Resources */,
+				85DF35F024B5995B002437AB /* manifest.json in Resources */,
+				85DADC1924B5971500025698 /* webext in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		85DADBE824B5971300025698 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85DADBF624B5971300025698 /* ViewController.swift in Sources */,
+				85DADBF124B5971300025698 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		85DADBFA24B5971400025698 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85DADC0724B5971400025698 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		85DADC0124B5971400025698 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 85DADBFD24B5971400025698 /* Lovely forks Extension */;
+			targetProxy = 85DADC0024B5971400025698 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		85DADBF224B5971300025698 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				85DADBF324B5971300025698 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		85DADC0A24B5971400025698 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.16;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		85DADC0B24B5971400025698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.16;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		85DADC0D24B5971400025698 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Lovely forks Extension/Lovely_forks_Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = "Lovely forks Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.Lovely-forks-Extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		85DADC0E24B5971400025698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Lovely forks Extension/Lovely_forks_Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = "Lovely forks Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.Lovely-forks-Extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		85DADC1124B5971400025698 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Lovely forks/Lovely_forks.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = "Lovely forks/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.Lovely-forks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		85DADC1224B5971400025698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Lovely forks/Lovely_forks.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = "Lovely forks/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.Lovely-forks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		85DADBE724B5971300025698 /* Build configuration list for PBXProject "Lovely forks" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				85DADC0A24B5971400025698 /* Debug */,
+				85DADC0B24B5971400025698 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		85DADC0C24B5971400025698 /* Build configuration list for PBXNativeTarget "Lovely forks Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				85DADC0D24B5971400025698 /* Debug */,
+				85DADC0E24B5971400025698 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		85DADC1024B5971400025698 /* Build configuration list for PBXNativeTarget "Lovely forks" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				85DADC1124B5971400025698 /* Debug */,
+				85DADC1224B5971400025698 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 85DADBE424B5971300025698 /* Project object */;
+}

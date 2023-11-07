@@ -1,0 +1,29 @@
+article.centered {
+  max-width: 420px;
+  margin: auto;
+  margin-top: 1em;
+}
+
+html, body {
+  background: transparent;
+}
+
+.centered-field {
+  display: flex;
+  justify-content: center;
+}
+
+.centered-field .label {
+  font-variant: small-caps;
+}
+
+.ui.to-indent {
+  margin-left: 1em;
+  margin-right: 1em;
+  display: flex;
+  align-items: center;
+}
+
+.emph {
+  font-style: italic;
+}
