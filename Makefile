@@ -16,7 +16,7 @@ readybuild:
 
 chrome: readybuild
 	@echo "Exporting build/${ARCHIVE_NAME}.chrome.zip"
-	@cat manifest.template.json | jq 'del(.applications)' > ${TMP_FOLDER}/manifest.json
+	@cat manifest.template.json | jq 'del(.browser_specific_settings)' > ${TMP_FOLDER}/manifest.json
 	@cd ${TMP_FOLDER}; zip -r ../build/${ARCHIVE_NAME}.chrome.zip .
 
 

@@ -1,8 +1,7 @@
-![Lovely forks logo](http://musicallyut.in/docs/lovely-forks/logo.png)
+![Lovely forks logo](http://musicallyut.xyz/docs/lovely-forks/logo.png)
 ## Lovely forks
 
 <p><a href="https://addons.mozilla.org/firefox/addon/lovely-forks/"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" width="18" /> Firefox addon</a></p>
-<p><a href="https://addons.mozilla.org/seamonkey/addon/lovely-forks/"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/seamonkey/seamonkey_48x48.png" width="18" /> SeaMonkey addon</a></p>
 <p><a href="https://chrome.google.com/webstore/detail/lovely-forks/ialbpcipalajnakfondkflpkagbkdoib"><img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" width="18" /> Chrome extension</a>
 </p>
  
@@ -38,7 +37,7 @@ However, the alternative only has 27 stars versus the 1,888 stars of the
 original project (at the time of writing):
 
 <p align="center">
-<img alt="Tipsy plugin" src="https://musicallyut.in/docs/lovely-forks/tipsy-fork.png" width="80%" />
+<img alt="Tipsy plugin" src="https://musicallyut.xyz/docs/lovely-forks/tipsy-fork.png" width="80%" />
 </p>
 
 Similarly, the project [slate](https://github.com/jigish/slate) was last
@@ -47,7 +46,7 @@ fork](https://github.com/mattr-/slate) only has 185 stars (at the time of
 writing):
 
 <p align="center">
-<img alt="slate" src="https://musicallyut.in/docs/lovely-forks/slate-fork.png" width="80%" />
+<img alt="slate" src="https://musicallyut.xyz/docs/lovely-forks/slate-fork.png" width="80%" />
 </p>
 
 In some cases, a new flavour of the project might become visible, like an
@@ -56,7 +55,7 @@ is [Semantic-UI](https://github.com/Semantic-Org/Semantic-UI) in a different
 language):
 
 <p align="center">
-<img alt="semantic-ui" src="https://musicallyut.in/docs/lovely-forks/semantic-fork.png" width="80%" />
+<img alt="semantic-ui" src="https://musicallyut.xyz/docs/lovely-forks/semantic-fork.png" width="80%" />
 </p>
 
 Or provides new features ([vim-fugitive](https://github.com/tpope/vim-fugitive) 
@@ -65,7 +64,7 @@ provides git integration for vim,
 integration):
 
 <p align="center">
-<img alt="vim-fugitive" src="https://musicallyut.in/docs/lovely-forks/fugitive-fork.png" width="80%" />
+<img alt="vim-fugitive" src="https://musicallyut.xyz/docs/lovely-forks/fugitive-fork.png" width="80%" />
 </p>
 
 ## Development
@@ -87,8 +86,7 @@ The final archives are kept in the `./build` folder.
 
 ### Testing
 
-The [`StandardJS` style checker](https://github.com/standard/standard) is used for setting the style guide
-in the code.
+The [`StandardJS` style checker](https://github.com/standard/standard) is used for setting the style guide in the code.
 
 For testing, the extension can be loaded into Chrome by going to [chrome://extensions](chrome://extensions) and clicking on the <kbd>Load Unpacked Extension</kbd> button.
 Then navigate to the `.tmp` folder in the source code root which was created by running `make chrome` and load it. An alternate is to run `make manifest` in the root folder and then load the source code root as the unpacked extension. This will allow for a simpler edit-reload cycle, except while editing `manifest.json.template`.
@@ -96,6 +94,10 @@ Then navigate to the `.tmp` folder in the source code root which was created by 
 For Firefox, the easiest way to test the packaged extension would be to download the [unbranded build](https://wiki.mozilla.org/Add-ons/Extension_Signing#Latest_Builds) or the [Developer Edition](https://www.mozilla.org/firefox/developer/) and loading the extension there. Otherwise, one would need to _sign_ the extension via your account on their Addon server. Go to [`about:addons`](about:addons), to the _Extensions_ Tab and click the Gear icon (Settings) on the top right to load the packed extension.
 
 If the browser still complains that the package has not been signed, then go to [`about:config`](about:config) and set `xpinstall.signatures.required` to `false`. Note that this setting only takes effect on the Developer Edition and the Unbranded versions of the browser even though it shows up in `about:config` pages of the release channel versions as well.
+
+## See Also
+
+ - [useful-forks.github.io](https://github.com/useful-forks/useful-forks.github.io) and [their Chrome extension](https://chrome.google.com/webstore/detail/useful-forks/aflbdmaojedofngiigjpnlabhginodbf).
 
 ## Acknowledgements
 
@@ -118,3 +120,7 @@ repository.
 [Jackymancs4](https://github.com/Jackymancs4) fixed [a bug](https://github.com/musically-ut/lovely-forks/issues/40) and re-enabled the settings page.
 
 [olso](https://github.com/olso) added an option to set how many days old the last commit on the current repository should be before the forks are shown.
+
+[Jorgen1040](https://github.com/Jorgen1040) helped fix a bug about multiple "also forked" messages appearing.
+
+[francislavoie](https://github.com/francislavoie) implemented a [repo skip list](https://github.com/musically-ut/lovely-forks/pull/74), to not show forks on specific repos.
