@@ -38,6 +38,8 @@ var script_css = `/* placeholder */
 
 /* smoother integration, show hierarchy */
 .lovely-forks-addon {
+    /* Render on its own line below the repository title. */
+    display: block;
     animation: fade-in 0.2s;
     padding-left: 1em;
 }
@@ -135,15 +137,20 @@ function getForksElement() {
 
     // If the layout of the page changes, we'll have to change this location.
     // We should make sure that we do not accidentally cause errors here.
-    var repoName = document.querySelector('main > div > div > div');
-    if (repoName) {
+    var repoName = document.querySelector('#repository-container-header strong[itemprop="name"]');
+    // The repo name sits inside a `display: flex` title row, which itself sits
+    // inside a `width: fit-content` container. We append the note to that outer
+    // container (below the title row) rather than into the flex row itself, so
+    // it gets its own line instead of truncating the repo title.
+    var titleContainer = repoName && repoName.closest('.flex-auto');
+    if (titleContainer) {
         try {
             text = document.createElement('span');
 
             // Stealing the styling from GitHub fork-info
             text.classList.add('fork-flag', 'lovely-forks-addon');
 
-            repoName.appendChild(text);
+            titleContainer.appendChild(text);
 
             return text;
         } catch (e) {

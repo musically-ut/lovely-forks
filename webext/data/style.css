@@ -1,10 +1,7 @@
-/* placeholder */
-main > div > div:not(.repository-content) > div:not(.has-lovely-forks) {
-    margin-bottom: 20px;
-}
-
 /* smoother integration, show hierarchy */
 .lovely-forks-addon {
+    /* Render on its own line below the repository title. */
+    display: block;
     animation: fade-in 0.2s;
     line-height: 1 !important;
     font-size: 12px !important;
