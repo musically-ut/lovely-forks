@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lovely forks preferences</title>
+  <link rel="stylesheet" href="./css/semantic.css">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <article class="centered">
+    <section class="heading">
+      <h1 class="ui block header">
+        <img src="../icons/Heart_and_fork_inside_128.png" alt="Lovely Forks icon">
+        <div class="content">
+          Lovely forks
+          <div class="sub header">Loved it so much that they forked it?</div>
+        </div>
+      </h1>
+    </section>
+
+    <section class="ui settings basic segment">
+      <p>How many stars should a fork have before we show it?</p>
+      <div class="ui form">
+        <div class="ui field">
+          <div class="ui labeled input">
+            <div class="ui label">Minimum stars:</div>
+            <input id="star_threshold" class="js-star-threshold" type="number" min="1">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ui settings basic segment">
+        <p>Only show message when last commit in base repo is older than?</p>
+        <div class="ui form">
+            <div class="ui field">
+                <div class="ui labeled input">
+                    <div class="ui label">Days:</div>
+                    <input id="days_threshold" class="js-days-threshold" type="number" min="0">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ui settings basic segment">
+      <p>Should the message under the repository name be <span class="emph">indented?</span></p>
+      <div class="ui form centered-field">
+          <span class="ui right aligned basic label">do not indent</span>
+          <div class="ui fitted toggle checkbox js-to-indent to-indent">
+            <input id="to_indent" type="checkbox">
+          </div>
+          <span  class="ui left aligned basic label">indent</span>
+        </div>
+      </div>
+    </section>
+
+  </article>
+  <script src="./js/jquery-3.3.1.js"></script>
+  <script src="./js/semantic.js"></script>
+  <script src="./js/main.js"></script>
+</body>
+</html>
