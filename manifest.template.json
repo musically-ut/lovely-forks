@@ -1,6 +1,6 @@
 {
   "name": "Lovely forks",
-  "version": "3.7.4",
+  "version": "3.7.5",
   "manifest_version": 3,
   "description": "Show notable forks of GitHub projects.",
   "homepage_url": "https://github.com/musically-ut/lovely-forks",
