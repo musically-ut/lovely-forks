@@ -98,7 +98,13 @@ function getForksElement () {
   // container (below the title row) rather than into the flex row itself, so
   // it gets its own line instead of competing for width and truncating the
   // repo title.
-  const titleContainer = repoName && repoName.closest('.flex-auto')
+  //
+  // When logged in, GitHub renders a different (React) header in which the
+  // title row (avatar, name, visibility label) is a flex child of the block
+  // `#repo-title-component`. Appending there likewise puts the note on its own
+  // line below the title.
+  const titleContainer = (repoName && repoName.closest('.flex-auto')) ||
+    document.querySelector('#repo-title-component')
   if (titleContainer) {
     try {
       text = document.createElement('span')

@@ -142,7 +142,12 @@ function getForksElement() {
     // inside a `width: fit-content` container. We append the note to that outer
     // container (below the title row) rather than into the flex row itself, so
     // it gets its own line instead of truncating the repo title.
-    var titleContainer = repoName && repoName.closest('.flex-auto');
+    //
+    // When logged in, GitHub renders a different (React) header in which the
+    // title row is a flex child of the block `#repo-title-component`.
+    // Appending there likewise puts the note on its own line below the title.
+    var titleContainer = (repoName && repoName.closest('.flex-auto')) ||
+        document.querySelector('#repo-title-component');
     if (titleContainer) {
         try {
             text = document.createElement('span');
