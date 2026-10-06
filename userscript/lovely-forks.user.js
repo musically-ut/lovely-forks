@@ -55,6 +55,11 @@ GM_addStyle(script_css);
 var _logName = 'lovely-forks:';
 var DEBUG = false;
 var text;
+// `user/repo` of the page we are currently showing data for.
+var currentRepoKey = null;
+// Re-renders the details into the note; kept so that the note can be restored
+// when GitHub re-renders the repository header.
+var lastShow = null;
 
 var svgNS = 'http://www.w3.org/2000/svg';
 
@@ -128,6 +133,21 @@ function parseTimeKey(key) {
     }
 }
 
+function findTitleContainer() {
+    // If the layout of the page changes, we'll have to change this location.
+    var repoName = document.querySelector('#repository-container-header strong[itemprop="name"]');
+    // The repo name sits inside a `display: flex` title row, which itself sits
+    // inside a `width: fit-content` container. We append the note to that outer
+    // container (below the title row) rather than into the flex row itself, so
+    // it gets its own line instead of truncating the repo title.
+    //
+    // When logged in, GitHub renders a different (React) header in which the
+    // title row is a flex child of the block `#repo-title-component`.
+    // Appending there likewise puts the note on its own line below the title.
+    return (repoName && repoName.closest('.flex-auto')) ||
+        document.querySelector('#repo-title-component');
+}
+
 function getForksElement() {
     // Verify that the element exists and it's still valid
     // otherwise, create it
@@ -135,14 +155,8 @@ function getForksElement() {
         return text;
     }
 
-    // If the layout of the page changes, we'll have to change this location.
     // We should make sure that we do not accidentally cause errors here.
-    var repoName = document.querySelector('#repository-container-header strong[itemprop="name"]');
-    // The repo name sits inside a `display: flex` title row, which itself sits
-    // inside a `width: fit-content` container. We append the note to that outer
-    // container (below the title row) rather than into the flex row itself, so
-    // it gets its own line instead of truncating the repo title.
-    var titleContainer = repoName && repoName.closest('.flex-auto');
+    var titleContainer = findTitleContainer();
     if (titleContainer) {
         try {
             text = document.createElement('span');
@@ -375,9 +389,13 @@ function processWithData(user, repo, remoteDataStr, selfDataStr, isFreshData) {
             return;
         }
 
-        safeUpdateDOM(showDetails(fullName, forkUrl, starGazers,
-                                  remoteIsNewer),
-                      'showing details');
+        // The user may have navigated to another repository in the meantime.
+        if (currentRepoKey !== user + '/' + repo) {
+            return;
+        }
+
+        lastShow = showDetails(fullName, forkUrl, starGazers, remoteIsNewer);
+        safeUpdateDOM(lastShow, 'showing details');
     } catch (e) {
         console.warn(_logName,
                      'Error while handling response: ',
@@ -502,13 +520,47 @@ function runFor(user, repo) {
 
 /* Script execution */
 
-var pathComponents = window.location.pathname.split('/');
-if (pathComponents.length >= 3) {
+function checkPage() {
+    var pathComponents = window.location.pathname.split('/');
     var user = pathComponents[1], repo = pathComponents[2];
-    runFor(user, repo);
-} else {
-    if (DEBUG) {
-        console.log(_logName,
-                    'The URL did not identify a username/repository pair.');
+    var repoKey = user && repo ? user + '/' + repo : null;
+
+    if (repoKey !== currentRepoKey) {
+        // Navigated (possibly without a page load) to a different page.
+        currentRepoKey = repoKey;
+        lastShow = null;
+        if (text && text.parentNode) {
+            text.parentNode.removeChild(text);
+        }
+
+        if (repoKey) {
+            runFor(user, repo);
+        } else if (DEBUG) {
+            console.log(_logName,
+                        'The URL did not identify a username/repository pair.');
+        }
+    } else if (lastShow && !document.body.contains(text) && findTitleContainer()) {
+        // GitHub's React app replaces the repository header while hydrating
+        // and on client-side navigation, which throws away our note.
+        if (DEBUG) {
+            console.log(_logName, 'Restoring the note after a re-render.');
+        }
+        safeUpdateDOM(lastShow, 'restoring details');
     }
 }
+
+checkPage();
+
+// GitHub navigates and re-renders without page loads, so watch the DOM instead
+// of relying on navigation events. Checks are batched, and use a timeout rather
+// than requestAnimationFrame, which never fires in background tabs.
+var checkScheduled = false;
+new MutationObserver(function () {
+    if (!checkScheduled) {
+        checkScheduled = true;
+        setTimeout(function () {
+            checkScheduled = false;
+            checkPage();
+        });
+    }
+}).observe(document.body, { childList: true, subtree: true });
