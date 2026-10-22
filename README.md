@@ -71,6 +71,14 @@ integration):
 
 Please install the following before building the extension:
 
+Use `nvm use` (Node 24.22.1) and `npm ci` for the local build tools. Supported
+Node lines are 22.23.4+, 24.22.1+, and 26.12.1+, bounded to those majors;
+prereleases and unsupported majors are rejected. `npm test` checks this policy.
+Both npm installation and the Makefile build enforce it. Prefer `npm run build`
+so the locked local `web-ext` is used instead of an unrelated global install.
+This controls build-time Node TLS only: the installed extension uses the
+browser/OS trust store, which must be maintained independently.
+
   - [`web-ext`](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Getting_started_with_web-ext)
   - [`jq`](https://stedolan.github.io/jq/) **Note:** This is not the `jq` on NPM, which is a server-side `jQuery` replacement.
 
