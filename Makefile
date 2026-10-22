@@ -1,11 +1,11 @@
-.PHONY: all chrome firefox devel readybuild
+.PHONY: all chrome firefox devel readybuild check-node
 
 VERSION=$(shell git describe --dirty)
 ARCHIVE_NAME=lovely-forks-${VERSION}
 TMP_FOLDER=tmp
 
 
-readybuild:
+readybuild: check-node
 	@echo "Preparing ${TMP_FOLDER} for building ..."
 	@rm -rf ${TMP_FOLDER}
 	@mkdir -p ${TMP_FOLDER}
@@ -26,6 +26,9 @@ firefox: readybuild
 	@web-ext lint --source-dir=${TMP_FOLDER}/ --ignore-files "webext/options_ui/js/semantic.js" "webext/options_ui/js/jquery-*.js"
 	@web-ext build --source-dir=${TMP_FOLDER}/ --overwrite-dest --artifacts-dir=build/
 
+
+check-node:
+	@node scripts/check-node.cjs
 
 manifest:
 	@cat manifest.template.json | jq 'del(.applications)' > manifest.json
